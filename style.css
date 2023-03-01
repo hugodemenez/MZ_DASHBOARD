@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
 * {
     --main-bg-color: brown;
     /* Bleu foncé MZ */
@@ -28,6 +30,8 @@
     --gris-na-mz: #ECECEC;
     /* Blanc MZ */
     --blanc-mz: #FFFFFF;
+
+    --margin:10px;
 }
 
 html, 
@@ -37,6 +41,7 @@ body {
     inset: 0;
     width:100%;
     height: 100%;
+    font-family: 'Inter', sans-serif;
 }
 
 .grid{
@@ -55,9 +60,10 @@ body {
 }
 
 .content{
+    margin: 0;
     overflow:hidden;
     grid-area: 1 / 2 / 3 / 3;
-    border-left: solid 1px black;
+    border-left: solid 1px var(--noir-mz);
     grid-template-rows: 100px 1fr;
 }
 
@@ -87,14 +93,16 @@ header input{
 
 .dashboard{
     grid-area: 2 / 1 / 3 / 1;
-    background: blue;
+    background: var(--blanc-mz);
+    border-top: solid 1px var(--noir-mz);
     width:100%;
     height: 100%;
     grid-template-columns: 65% 1fr;
 }
 
-.zone1{
-    background:var(--gris-sombre-mz);
-    margin:0;
+.zone1 h1{
+    color: var(--cyan-mz);
+    margin-top: var(--margin);
+    margin-left: var(--margin);
     padding:0;
 }
