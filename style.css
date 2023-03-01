@@ -92,6 +92,7 @@ header input{
 }
 
 .dashboard{
+    display:grid;
     grid-area: 2 / 1 / 3 / 1;
     background: var(--blanc-mz);
     border-top: solid 1px var(--noir-mz);
@@ -100,9 +101,47 @@ header input{
     grid-template-columns: 65% 1fr;
 }
 
+.zone1 h1, .zone2 h1{
+    width:100%;
+    margin:0;
+}
+
 .zone1 h1{
     color: var(--cyan-mz);
-    margin-top: var(--margin);
-    margin-left: var(--margin);
-    padding:0;
+}
+
+.zone1, .zone2{
+    padding: var(--margin);
+}
+
+.zone1{
+    grid-area: 1/1/1/2;
+}
+
+.zone2{
+    grid-area: 1/2/1/3;
+}
+
+.client{
+
+}
+
+.client-slider{
+    display:flex;
+    flex-direction: row;
+    gap:20px;
+    overflow-x: scroll;
+}
+
+.card{
+    position:relative;
+    flex-shrink: 0;
+    width:220px;
+    height:300px;
+    border-radius: 15px;
+    background: var(--bleu-mz);
+}
+
+.card-settings{
+    
 }
