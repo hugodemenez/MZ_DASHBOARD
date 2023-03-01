@@ -127,6 +127,7 @@ header input{
 }
 
 .client-slider{
+    scroll-behavior: smooth;
     display:flex;
     flex-direction: row;
     gap:20px;
@@ -143,5 +144,5 @@ header input{
 }
 
 .card-settings{
-    
+
 }
