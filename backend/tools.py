@@ -27,6 +27,7 @@ def read_excel_file(path:str):
 from selenium import webdriver
 from selenium.webdriver.edge.options import Options as EdgeOptions
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.select import Select
 
 class Scraping():
     """
@@ -56,9 +57,38 @@ class Scraping():
         # Insert data into corresponding password field
         password_field = driver.find_element(By.ID, "j_password")
         password_field.send_keys(password)
-        input()
 
         submit_button.click()
+
+        # Now we are logged in and we want to find the url to download the report
+        driver.get('https://mazars-prod.aspaway.net/akuiteo.collabs/rapports/tous')
+
+        try:
+            # We have to click on download icon containing
+            download_btn = driver.find_element(By.CSS_SELECTOR,".fa-download")
+            download_btn.click()
+            # Select the last date available
+            select_element = driver.find_element(By.ID, 'combo.grp_annee_mois.0')
+            select = Select(select_element)
+            select_options = select.all_selected_options()
+            print(select_options)
+            input()
+            select.select_by_index(-1)
+
+            # Click on download button to get format options
+            download_button = driver.find_element(By.ID, "sauvegarderParametres")
+            download_button.click()
+            
+            # Click on download button to get format options
+            excel_download = driver.find_element(By.ID, "XLS")
+            excel_download.click()
+        except Exception as error:
+            print(error)
+        
+        try:
+            pass
+        except Exception as error:
+            print(error)
         input()
 
         driver.quit()
