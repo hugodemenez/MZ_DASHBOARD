@@ -22,3 +22,46 @@ def read_excel_file(path:str):
     except Exception as error:
         print(f"error reading {path} : {error}")
         pass
+
+
+from selenium import webdriver
+from selenium.webdriver.edge.options import Options as EdgeOptions
+from selenium.webdriver.common.by import By
+
+class scraping():
+    """
+    Cette classe regroupe les differentes fonctions de scraping
+    utilisées pour récuperer les données de WebAurion
+    """
+    def __init__(self):
+        #On initialise le headless webbrowser
+        pass
+
+    def download_timetable(self,username,password):
+        """
+        Scraping to download timetable
+        """
+
+        options = EdgeOptions()
+        #options.add_argument("--headless=new")
+
+        driver = webdriver.Edge(options=options)
+        driver.get('https://mazars-prod.aspaway.net/akuiteo.collabs/saisie/agenda')
+        submit_button = driver.find_element(by=By.CSS_SELECTOR, value="button")
+
+        # Insert data into corresponding username field
+        username_field = driver.find_element(By.ID, "j_username")
+        username_field.send_keys(username)
+
+        # Insert data into corresponding password field
+        password_field = driver.find_element(By.ID, "j_password")
+        password_field.send_keys(password)
+        input()
+
+        submit_button.click()
+        input()
+
+        driver.quit()
+        return
+
+scraping().download_timetable("test","test")

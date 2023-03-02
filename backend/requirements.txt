@@ -1,0 +1,7 @@
+selenium-wire
+pandas
+pydantic
+bs4
+xlrd
+"uvicorn[standard]"
+fastapi
