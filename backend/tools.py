@@ -28,7 +28,7 @@ from selenium import webdriver
 from selenium.webdriver.edge.options import Options as EdgeOptions
 from selenium.webdriver.common.by import By
 
-class scraping():
+class Scraping():
     """
     Cette classe regroupe les differentes fonctions de scraping
     utilisées pour récuperer les données de WebAurion
@@ -64,4 +64,8 @@ class scraping():
         driver.quit()
         return
 
-scraping().download_timetable("test","test")
+
+from dotenv import load_dotenv
+load_dotenv()
+
+Scraping().download_timetable(os.getenv("DEV_USERNAME"),os.getenv("DEV_PASSWORD"))
