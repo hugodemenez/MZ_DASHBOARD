@@ -34,7 +34,7 @@ import time
 class Scraping():
     """
     Cette classe regroupe les differentes fonctions de scraping
-    utilisées pour récuperer les données de WebAurion
+    utilisées pour récuperer les données de Akuito
     """
     def __init__(self):
         #On initialise le headless webbrowser
@@ -71,7 +71,7 @@ class Scraping():
             download_div = driver.find_element(By.PARTIAL_LINK_TEXT, 'Ma Fiche Personnelle')
             document_id = download_div.get_attribute("id")
             driver.execute_script(f"print({document_id});")
-            
+
             time.sleep(5)
             # Select the last date available
             select_element = driver.find_element(By.ID, 'combo.grp_annee_mois.0')
@@ -91,7 +91,7 @@ class Scraping():
             excel_download.click()
         except Exception as error:
             print(error)
-        
+
         try:
             pass
         except Exception as error:
