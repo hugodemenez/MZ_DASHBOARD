@@ -27,6 +27,7 @@ def get_timetable(
     Returns:
         _type_: _description_
     """
+
     #path = download_timetable(username=username, password=password)
     for root, dirs, files in os.walk("."):
         for name in files:
