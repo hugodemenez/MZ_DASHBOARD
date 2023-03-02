@@ -13,6 +13,7 @@ const timeline = new Chart(ctx, {
         type: 'bar',
         data: data,
         options: {
+            resizeDelay:300,
             plugins:{
                 legend:{
                     display:false,

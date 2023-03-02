@@ -28,6 +28,8 @@ from selenium import webdriver
 from selenium.webdriver.edge.options import Options as EdgeOptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
+import urllib.request
+import time
 
 class Scraping():
     """
@@ -44,9 +46,10 @@ class Scraping():
         """
 
         options = EdgeOptions()
-        #options.add_argument("--headless=new")
-
+        options.add_argument("--headless=new")
         driver = webdriver.Edge(options=options)
+
+        # Going to agenda website
         driver.get('https://mazars-prod.aspaway.net/akuiteo.collabs/saisie/agenda')
         submit_button = driver.find_element(by=By.CSS_SELECTOR, value="button")
 
@@ -64,21 +67,25 @@ class Scraping():
         driver.get('https://mazars-prod.aspaway.net/akuiteo.collabs/rapports/tous')
 
         try:
-            # We have to click on download icon containing
-            download_btn = driver.find_element(By.CSS_SELECTOR,".fa-download")
-            download_btn.click()
+            # Launch download selector screen
+            download_div = driver.find_element(By.PARTIAL_LINK_TEXT, 'Ma Fiche Personnelle')
+            document_id = download_div.get_attribute("id")
+            driver.execute_script(f"print({document_id});")
+            
+            time.sleep(5)
             # Select the last date available
             select_element = driver.find_element(By.ID, 'combo.grp_annee_mois.0')
             select = Select(select_element)
-            select_options = select.all_selected_options()
-            print(select_options)
-            input()
-            select.select_by_index(-1)
+            select_options = select.options
+            for option in select_options:
+                last_option = option
+            last_option.click()
 
             # Click on download button to get format options
             download_button = driver.find_element(By.ID, "sauvegarderParametres")
             download_button.click()
-            
+
+            time.sleep(5)
             # Click on download button to get format options
             excel_download = driver.find_element(By.ID, "XLS")
             excel_download.click()
