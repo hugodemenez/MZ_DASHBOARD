@@ -11,7 +11,6 @@ from selenium import webdriver
 from selenium.webdriver.edge.options import Options as EdgeOptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
-
 from selenium.common.exceptions import NoSuchElementException
 
 
