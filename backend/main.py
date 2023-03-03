@@ -1,21 +1,19 @@
-from typing import Union
-from tools import download_timetable, read_excel_file
-from fastapi import FastAPI
-from pydantic import BaseModel
-import uvicorn
+"""API
+"""
+
 import os
-import json
-import pandas as pd
+import uvicorn
+
+from tools import Akuiteo, read_excel_file
+from fastapi import FastAPI
+from dotenv import load_dotenv
+
 app = FastAPI()
-
-
-
-
 
 @app.post("/")
 def get_timetable(
-    username:str,
-    password:str):
+    username:str = os.getenv("DEV_USERNAME"),
+    password:str = os.getenv("DEV_PASSWORD")):
     """API Post request to get timetable 
     from mazars-prod.aspaway.net/akuiteo.collabs/ 
     according to username and password
@@ -27,14 +25,15 @@ def get_timetable(
     Returns:
         _type_: _description_
     """
-
     #path = download_timetable(username=username, password=password)
-    for root, dirs, files in os.walk("."):
-        for name in files:
-            if name.endswith(("xls")):
-                print(name,root)
-                print(f"readng {name}")
-                return read_excel_file(f"{root}\{name}")
+    return read_excel_file(
+        Akuiteo().download_timetable(
+            username=username,
+            password=password,
+        )
+    )
 
 if __name__ == "__main__":
+    # Loads the .env vars
+    load_dotenv()
     uvicorn.run("main:app", port=5000, log_level="info", reload=True)
