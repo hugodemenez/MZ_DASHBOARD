@@ -139,8 +139,6 @@ header input{
     grid-row: 1/2;
 }
 .client-slider{
-
-    scroll-behavior: smooth;
     display:flex;
     flex-direction: row;
     gap:20px;
