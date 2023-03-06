@@ -45,16 +45,7 @@ def get_timetable(
 def upload_agreementfiit_data(
     files: list[UploadFile]
     ):
-    """API Post request to get timetable 
-    from mazars-prod.aspaway.net/akuiteo.collabs/ 
-    according to username and password
-
-    Args:
-        username (str): username 
-        password (str): password
-
-    Returns:
-        _type_: _description_
+    """API that gets the total_heures from the agreement_fiit excel file
     """
     for file in files:
         agreement_fiit = pd.read_excel(file.file,sheet_name="data")
