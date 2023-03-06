@@ -3,12 +3,11 @@
 
 import os
 import uvicorn
-import logging
+import pandas as pd
 
 from tools import Akuiteo, read_excel_file
-from fastapi import FastAPI, UploadFile, HTTPException
+from fastapi import FastAPI, UploadFile
 from dotenv import load_dotenv
-from logger import logger
 app = FastAPI()
 
 @app.post("/")
@@ -34,7 +33,7 @@ def get_timetable(
         )
     )
 
-import pandas as pd
+
 @app.post("/uploadfiles/")
 def upload_agreementfiit_data(
     files: list[UploadFile]
