@@ -5,12 +5,13 @@ import os
 import json
 import time
 import pandas as pd
-
+from logger import logger
 from selenium import webdriver
 from selenium.webdriver.edge.options import Options as EdgeOptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import NoSuchElementException
+from fastapi import HTTPException
 
 def read_excel_file(path:str):
     """Reads the xls file and returns timetable as json
@@ -30,9 +31,11 @@ def read_excel_file(path:str):
         dataframe = dataframe.rename(columns=dataframe.iloc[0]).loc[1:]
         dataframe = dataframe[["AFFAIRES","Total"]]
         return json.loads(dataframe.to_json(orient="records"))
-    except Exception as error:
-        print(f"error reading {path} : {error}")
-        return json.dumps({"error":"Le fichier renseigné n'est pas au bon format"})
+    except FileNotFoundError as exception:
+        raise HTTPException(
+            status_code=404,
+            detail="Impossible de charger les temps",
+        ) from exception
 
 class Akuiteo():
     """
@@ -67,8 +70,11 @@ class Akuiteo():
                 submit_button = self.driver.find_element(by=By.CSS_SELECTOR, value="button")
                 username_field = self.driver.find_element(By.ID, "j_username")
                 password_field = self.driver.find_element(By.ID, "j_password")
-            except NoSuchElementException():
-                return
+            except NoSuchElementException as exception:
+                raise HTTPException(
+                    status_code=404,
+                    detail="Impossible de se connecter au service Akuiteo",
+                ) from exception
 
             # Insert data into corresponding username field
             username_field.send_keys(username)
@@ -95,12 +101,11 @@ class Akuiteo():
             self.driver.execute_script(f"print({document_id});")
 
             # Log status
-            print("Getting the last date available")
+            logger.info("Getting the last date available")
 
             # Looping until finding the right element
             while True:
                 try:
-
                     # Select the last date available
                     select_element = self.driver.find_element(
                         By.ID, 'combo.grp_annee_mois.0',
@@ -115,7 +120,7 @@ class Akuiteo():
             last_option.click()
             time.sleep(2)
             # Click on download button to get format options
-            print("Opening the download options")
+            logger.info("Opening the download options")
             download_button = self.driver.find_element(By.ID, "sauvegarderParametres")
             download_button.click()
 
@@ -125,7 +130,7 @@ class Akuiteo():
                     files_before_dl.append(os.path.join(path, name))
 
             # Click on download button to get format options
-            print("Trying to click on the download option for XLS")
+            logger.info("Trying to click on the download option for XLS")
             while True:
                 try:
                     excel_download = self.driver.find_element(By.ID, "XLS")
@@ -135,7 +140,7 @@ class Akuiteo():
                 except NoSuchElementException:
                     pass
 
-            print("Looking for downloaded file")
+            logger.info("Looking for downloaded file")
             while True:
                 files_after_dl = []
                 for path, _, files in os.walk("."):
@@ -143,7 +148,7 @@ class Akuiteo():
                         files_after_dl.append(os.path.join(path, name))
                 for file in files_after_dl:
                     if not file in files_before_dl and "xls" in file:
-                        print("File downloaded")
+                        logger.info("File downloaded")
                         return file
 
             self.driver.quit()

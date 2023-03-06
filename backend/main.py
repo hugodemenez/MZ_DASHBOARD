@@ -3,11 +3,12 @@
 
 import os
 import uvicorn
+import logging
 
 from tools import Akuiteo, read_excel_file
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, UploadFile, HTTPException
 from dotenv import load_dotenv
-
+from logger import logger
 app = FastAPI()
 
 @app.post("/")
@@ -50,12 +51,14 @@ def upload_agreementfiit_data(
         _type_: _description_
     """
     for file in files:
-        df = pd.read_excel(file.file,sheet_name="data")
+        agreement_fiit = pd.read_excel(file.file,sheet_name="data")
         file.file.close()
-        total_heures = df[df.eq("total_heures").any(1)]
+        total_heures = agreement_fiit[agreement_fiit.eq("total_heures").any(1)]
         total_heures= total_heures.dropna(axis=1, how='all')
-        print(total_heures.iat[0,1])
-    return {"filenames": [file.filename for file in files]}
+
+    return total_heures.iat[0,1]
+
+
 
 if __name__ == "__main__":
     # Loads the .env vars
