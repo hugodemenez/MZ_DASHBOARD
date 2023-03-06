@@ -5,7 +5,7 @@ import os
 import uvicorn
 import pandas as pd
 
-from tools import Akuiteo, read_excel_file
+from tools import Akuiteo
 from fastapi import FastAPI, UploadFile
 from dotenv import load_dotenv
 app = FastAPI()
@@ -25,13 +25,11 @@ def get_timetable(
     Returns:
         _type_: _description_
     """
-    #path = download_timetable(username=username, password=password)
-    return read_excel_file(
-        Akuiteo().download_timetable(
-            username=username,
-            password=password,
-        )
+    akuiteo_file = Akuiteo().download_timetable(
+        username=username,
+        password=password,
     )
+    return Akuiteo().read_excel_file(akuiteo_file)
 
 
 @app.post("/uploadfiles/")
