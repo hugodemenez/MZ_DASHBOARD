@@ -6,15 +6,11 @@ import json
 import time
 import pandas as pd
 
-
 from selenium import webdriver
 from selenium.webdriver.edge.options import Options as EdgeOptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import NoSuchElementException
-
-
-
 
 def read_excel_file(path:str):
     """Reads the xls file and returns timetable as json
@@ -29,11 +25,11 @@ def read_excel_file(path:str):
         }
     """
     try:
-        df = pd.read_excel(f"{path}", engine="xlrd",sheet_name=2)
+        dataframe = pd.read_excel(f"{path}", engine="xlrd",sheet_name=2)
         os.remove(path)
-        df = df.rename(columns=df.iloc[0]).loc[1:]
-        df = df[["AFFAIRES","Total"]]
-        return json.loads(df.to_json(orient="records"))
+        dataframe = dataframe.rename(columns=dataframe.iloc[0]).loc[1:]
+        dataframe = dataframe[["AFFAIRES","Total"]]
+        return json.loads(dataframe.to_json(orient="records"))
     except Exception as error:
         print(f"error reading {path} : {error}")
         return json.dumps({"error":"Le fichier renseigné n'est pas au bon format"})
@@ -124,7 +120,7 @@ class Akuiteo():
             download_button.click()
 
             files_before_dl = []
-            for path, subdirs, files in os.walk("."):
+            for path, _, files in os.walk("."):
                 for name in files:
                     files_before_dl.append(os.path.join(path, name))
 
@@ -142,7 +138,7 @@ class Akuiteo():
             print("Looking for downloaded file")
             while True:
                 files_after_dl = []
-                for path, subdirs, files in os.walk("."):
+                for path, _, files in os.walk("."):
                     for name in files:
                         files_after_dl.append(os.path.join(path, name))
                 for file in files_after_dl:
