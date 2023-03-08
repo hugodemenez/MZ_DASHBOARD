@@ -54,19 +54,20 @@ body{
 }
 
 .nav{
-    align-items: right;
-    justify-items: center;
+    display:flex;
+    justify-content: right;
     margin: auto 0;
     grid-column: 1/2;
     grid-row: 2/4;
 }
 
 .header{
+    border-left: solid 1px var(--noir-mz);
     display:flex;
     justify-content: space-between;
     grid-column: 2/4;
     grid-row: 1/2;
-    background: var(--blanc-mz)
+    background: var(--blanc-mz);
 }
 
 .header .logo{
@@ -87,6 +88,7 @@ body{
 }
 
 .dashboard{
+    border-left: solid 1px var(--noir-mz);
     display:grid;
     grid-column: 2/4;
     grid-row: 2/4;
@@ -128,5 +130,14 @@ body{
     position:absolute;
     top:15px;
     right:15px;
+}
+
+.nav-item{
+    margin:0;
+}
+
+.nav-item:hover{
+    fill:#0070CE;
+    border-right: solid 3px var(--noir-mz);
 }
 
