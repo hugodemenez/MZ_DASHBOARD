@@ -15,7 +15,7 @@
         <form action="javascript:void(0);">
             <input type="text" id="username" placeholder="identifiant" required>
             <input type="password" id="password"  placeholder="mot de passe" required>
-            <button onclick=close_dialog_box()  type="button">Se connecter</button>
+            <button onclick=close_dialog_box()  type="submit">Se connecter</button>
         </form>
     </dialog>
 
@@ -26,8 +26,8 @@
     </div>
     <div class="header">
         <input type="text" class="search-bar" placeholder="🔍 Rechercher un dossier...">
-        <button id="open-login-dialog" onclick=open_dialog_box()  type="button">
-            Login
+        <button class="sync-data-btn" id="open-login-dialog" onclick=open_dialog_box()  type="button">
+            Synchroniser 
         </button>
         <img src="./assets/logo.png" alt="logo mazars" class="logo">
     </div>

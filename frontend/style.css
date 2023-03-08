@@ -87,6 +87,24 @@ body{
     font-size: medium;
 }
 
+.header .search-bar:hover{
+    transform:scale(1.05)
+}
+
+.header .sync-data-btn{
+    margin:10px;
+    border-radius: 15px;
+    border: 0;
+    padding:10px;
+    background:var(--bleu-mz);
+    color:var(--blanc-mz);
+    font-size: medium;
+}
+
+.header .sync-data-btn:hover{
+    background:var(--bleu-fonce-mz);
+}
+
 .dashboard{
     border-left: solid 1px var(--noir-mz);
     display:grid;
@@ -126,10 +144,21 @@ body{
     background: var(--bleu-mz);
 }
 
+.card:hover{
+    transform:scale(1.05);
+}
+
 .card-settings{
     position:absolute;
     top:15px;
     right:15px;
+}
+
+.card-title{
+    color:var(--blanc-mz);
+    font-size: 24px;
+    font-weight:bold;
+    padding:var(--padding);
 }
 
 .nav-item{
@@ -142,7 +171,10 @@ body{
 }
 
 .login-form{
-    box-shadow: 0px 0px 100px black;
     inset: 0;
     z-index: 1;
+    border:none;
+    opacity: 0.9;
+    background: var(--noir-mz);
 }
+
