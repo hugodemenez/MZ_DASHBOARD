@@ -141,3 +141,8 @@ body{
     border-right: solid 3px var(--noir-mz);
 }
 
+.login-form{
+    box-shadow: 0px 0px 100px black;
+    inset: 0;
+    z-index: 1;
+}

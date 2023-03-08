@@ -1,2 +1,4 @@
-backend\.venv\Scripts\python.exe backend\main.py
+pip install -r backend/requirements.txt
+start frontend\index.html
+python backend\main.py
 pause
