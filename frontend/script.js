@@ -1,6 +1,6 @@
 const zone1 = document.getElementById("zone1")
 const p = document.createElement("p")
-//zone1.prepend("ts",p)
+
 
 
 document.getElementById("dialog-box")
@@ -29,8 +29,20 @@ function close_dialog_box(){
         return response.json();
     }).then(function(response) {
         console.log(response);
+        response.forEach(element => {
+            const card = document.createElement('div');
+            card.className = "card"
+            card.append(element.AFFAIRES,p)
+            zone1.prepend(card,p)
+        });
+        
     });
 }
 
 
-
+data.forEach(element => {
+    const card = document.createElement('div');
+    card.className = "card"
+    card.append(element.AFFAIRES,p)
+    zone1.prepend(card,p)
+});
