@@ -4,36 +4,33 @@
 import os
 import uvicorn
 import pandas as pd
+import sqlite3
 
 from tools import Akuiteo, read_excel_file
 from fastapi import FastAPI, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi import HTTPException
 from dotenv import load_dotenv
 from pydantic import BaseModel
-from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-
-origins = ["*"]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
-class Item(BaseModel):
+class User(BaseModel):
     """Class model for params from API Post request"""
     username: str
     password: str
 
-
 @app.post("/get_akuiteo_timetable/")
 def get_timetable(
-    item : Item):
+    user : User):
     """API Post request to get timetable 
     from mazars-prod.aspaway.net/akuiteo.collabs/ 
     according to username and password
@@ -45,14 +42,90 @@ def get_timetable(
     Returns:
         _type_: _description_
     """
-    item = item.dict()
+
     akuiteo_file = Akuiteo().download_timetable(
-            username=item["username"],
-            password=item["password"],
+            username=user.username,
+            password=user.password,
         )
 
     return read_excel_file(path=akuiteo_file)
 
+@app.post("/upload_timetable_to_db/")
+def upload_timetable(
+    data : list):
+    """API Post request to upload data to sqlite db
+
+    Args:
+        username (str): username 
+        password (str): password
+
+    Returns:
+        _type_: _description_
+    """
+
+    # Creates database connection (create db if not exists)
+    connection = sqlite3.connect("database.db")
+    cursor = connection.cursor()
+
+    sql_request = """CREATE TABLE IF NOT EXISTS timetable (AFFAIRES,Total)"""
+    cursor.execute(sql_request)
+    for item in data:
+        sql_request = f"""INSERT INTO
+        timetable(AFFAIRES,Total) 
+        VALUES('{item.get("AFFAIRES",None)}','{item.get("Total",None)}')
+        """
+        cursor.execute(sql_request)
+    connection.commit()
+    connection.close()
+    raise HTTPException(
+        status_code=200,
+        detail="Success",
+    )
+
+@app.get("/read_timetable_from_db/")
+def read_db():
+    """API Post request to upload data to sqlite db
+
+    Args:
+        username (str): username 
+        password (str): password
+
+    Returns:
+        _type_: _description_
+    """
+
+    # Creates database connection (create db if not exists)
+    connection = sqlite3.connect("database.db")
+    cursor = connection.cursor()
+    try:
+        # Getting columns names
+        sql_request = "PRAGMA table_info(timetable);"
+        result = cursor.execute(sql_request)
+        result = result.fetchall()
+        columns = [column_name for _,column_name,_,_,_,_ in result]
+
+        # Selecting values
+        sql_request = "SELECT * FROM timetable"
+        results = cursor.execute(sql_request)
+        results = results.fetchall()
+
+
+        output = []
+        for result in results:
+            dictionnary = {}
+            for value,column in zip(result,columns):
+                dictionnary[column] = value
+            output.append(dictionnary)
+
+        connection.close()
+
+        return output
+    except:
+        connection.close()
+        raise HTTPException(
+            status_code=500,
+            detail="No data in database",
+        )
 
 @app.post("/uploadfiles/")
 def upload_agreementfiit_data(
@@ -66,7 +139,6 @@ def upload_agreementfiit_data(
         total_heures = agreement_fiit[agreement_fiit.eq("total_heures").any(1)]
         total_heures= total_heures.dropna(axis=1, how='all')
     return total_heures.iat[0,1]
-
 
 @app.get("/")
 def initializer(
