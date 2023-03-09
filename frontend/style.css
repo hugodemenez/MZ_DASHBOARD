@@ -65,6 +65,7 @@ body{
     border-left: solid 1px var(--noir-mz);
     display:flex;
     justify-content: space-between;
+    align-items: center;
     grid-column: 2/4;
     grid-row: 1/2;
     background: var(--blanc-mz);
@@ -87,9 +88,6 @@ body{
     font-size: medium;
 }
 
-.header .search-bar:hover{
-    transform:scale(1.05)
-}
 
 .header .sync-data-btn{
     margin:10px;

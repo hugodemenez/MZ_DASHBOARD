@@ -131,13 +131,71 @@ def upload_agreementfiit_data(
     files: list[UploadFile]
     ):
     """API that gets the total_heures from the agreement_fiit excel file
+    and put it in the db
     """
+
+    # Creates database connection (create db if not exists)
+    connection = sqlite3.connect("database.db")
+    cursor = connection.cursor()
+    sql_request = """CREATE TABLE IF NOT EXISTS client (name,hours)"""
+    cursor.execute(sql_request)
     for file in files:
+        print(file.filename)
         agreement_fiit = pd.read_excel(file.file,sheet_name="data")
         file.file.close()
         total_heures = agreement_fiit[agreement_fiit.eq("total_heures").any(1)]
         total_heures= total_heures.dropna(axis=1, how='all')
-    return total_heures.iat[0,1]
+        sql_request = f"""INSERT INTO
+        client(name,hours) 
+        VALUES('{file.filename}','{total_heures.iat[0,1]}')
+        """
+        cursor.execute(sql_request)
+        connection.commit()
+
+    connection.close()
+    raise HTTPException(
+        status_code=200,
+        detail="Success",
+    )
+
+@app.get("/getClients/")
+def get_clients(
+    ):
+    """API that gets the total_heures from the agreement_fiit excel file
+    and put it in the db
+    """
+
+    # Creates database connection (create db if not exists)
+    connection = sqlite3.connect("database.db")
+    cursor = connection.cursor()
+    try:
+        # Getting columns names
+        sql_request = "PRAGMA table_info(client);"
+        result = cursor.execute(sql_request)
+        result = result.fetchall()
+        columns = [column_name for _,column_name,_,_,_,_ in result]
+
+        # Selecting values
+        sql_request = "SELECT * FROM client"
+        results = cursor.execute(sql_request)
+        results = results.fetchall()
+
+
+        output = []
+        for result in results:
+            dictionnary = {}
+            for value,column in zip(result,columns):
+                dictionnary[column] = value
+            output.append(dictionnary)
+        connection.close()
+        return output
+
+    except sqlite3.OperationalError as error:
+        connection.close()
+        raise HTTPException(
+            status_code=204,
+            detail="No data in database",
+        ) from error
 
 @app.get("/")
 def initializer(

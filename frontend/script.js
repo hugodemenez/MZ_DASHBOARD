@@ -371,3 +371,25 @@ function search_bar() {
         }
     }
 }
+
+
+
+// This function add the data to the database
+function add_agreementfiit_to_db(){
+    let file = document.getElementById("agreement-fiit").files[0];
+    let formData = new FormData();
+    formData.append("files", file);
+    const request = new Request("http://127.0.0.1:5000/uploadfiles", {
+        method: "POST",
+        body: formData,
+        mode: "cors",
+        cache: "default",
+    });
+    
+    fetch(request).then(function(response) {
+        return response.json();
+    }).then(function(response) {
+        console.log(response)
+    });
+}
+
