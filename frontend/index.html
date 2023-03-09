@@ -11,10 +11,11 @@
 </head>
 
 <body>
-    <dialog id="dialog-box" class="login-form">
-        <form action="javascript:void(0);">
-            <input type="text" id="username" placeholder="identifiant" required>
-            <input type="password" id="password"  placeholder="mot de passe" required>
+    <dialog id="loading" class="loading"><img src="./assets/loading.gif" alt="" open></dialog>
+    <dialog id="dialog-box" class="login-dialog">
+        <form action="javascript:void(0);" class="login-form">
+            <input type="text" id="username" placeholder="Identifiant" required>
+            <input type="password" id="password"  placeholder="Mot de passe" required>
             <button onclick=close_dialog_box()  type="submit">Se connecter</button>
         </form>
     </dialog>

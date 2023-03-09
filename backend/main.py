@@ -116,16 +116,15 @@ def read_db():
             for value,column in zip(result,columns):
                 dictionnary[column] = value
             output.append(dictionnary)
-
         connection.close()
-
         return output
-    except:
+
+    except sqlite3.OperationalError as error:
         connection.close()
         raise HTTPException(
-            status_code=500,
+            status_code=204,
             detail="No data in database",
-        )
+        ) from error
 
 @app.post("/uploadfiles/")
 def upload_agreementfiit_data(

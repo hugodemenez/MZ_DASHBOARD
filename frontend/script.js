@@ -1,11 +1,14 @@
 const dialog = document.getElementById("dialog-box")
 const zone1 = document.getElementById("zone1");
 
+const loading = document.getElementById("loading")
+
 
 function open_dialog_box(){
     dialog.showModal();
 }
 
+// This function close the dialog box and create cards from data fetched from the server, then add the data to the database
 function close_dialog_box(){
     dialog.close();
     const content = {
@@ -21,10 +24,11 @@ function close_dialog_box(){
         mode: "cors",
         cache: "default",
     });
-    
+    loading.show();
     fetch(request).then(function(response) {
         return response.json();
     }).then(function(response) {
+        loading.close();
         try{
             response.forEach(element => {
                 create_card(element);
@@ -37,6 +41,7 @@ function close_dialog_box(){
     });
 }
 
+// This function add the data to the database
 function add_element_to_db(data){
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -63,19 +68,16 @@ function fetch_database(){
         mode: "cors",
         cache: "default",
     });
-    
     fetch(request).then(function(response) {
-        return response.json();
+        return response
     }).then(function(response) {
-        console.log(response)
-        try{
-            
-            response.forEach(element => {
-                create_card(element)
-            });
-        }
-        catch(error){
-            console.log(error);
+        if (response.status==200){
+            response.json().then(function(data){
+                data.forEach(element => {
+                    console.log(element)
+                    create_card(element)
+                });
+            })
         }
     });
 }
@@ -88,27 +90,24 @@ dossiers = [
 ]
 
 function create_card(data){
-    dossiers.forEach(dossier => {
-        if (data.AFFAIRES.includes(dossier)){
-            const card = document.createElement('div');
-            card.className = "card";
+    if (data.AFFAIRES.includes("")){
+        const card = document.createElement('div');
+        card.className = "card";
 
-            // Add title name
-            const title = document.createElement("h1");
-            title.className = "card-title";
-            title.append(dossier)
+        // Add title name
+        const title = document.createElement("h1");
+        title.className = "card-title";
+        title.append(data.AFFAIRES)
 
-            // Add total hours
-            const status = document.createElement("p");
-            status.className = "card-status";
-            status.append(data.Total)
+        // Add total hours
+        const status = document.createElement("p");
+        status.className = "card-status";
+        status.append(data.Total)
 
 
-            card.append(title);
-            card.append(status);
-            zone1.prepend(card);
-        }
-        }
-    );
+        card.append(title);
+        card.append(status);
+        zone1.prepend(card);
+    }
 }
 

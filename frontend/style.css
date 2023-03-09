@@ -170,11 +170,48 @@ body{
     border-right: solid 3px var(--noir-mz);
 }
 
-.login-form{
+.login-dialog{
     inset: 0;
     z-index: 1;
     border:none;
     opacity: 0.9;
-    background: var(--noir-mz);
+    border-radius: var(--radius);
 }
 
+.login-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap:var(--margin);
+}
+
+.login-form input{
+    border:transparent;
+    border-radius: var(--radius);
+    background: var(--gris-na-mz);
+    padding:var(--padding);
+    color:var(--gris-sombre-mz);
+}
+
+.login-form button{
+    border:transparent;
+    border-radius: var(--radius);
+    background: var(--bleu-mz);
+    padding:var(--padding);
+    color:var(--blanc-mz);
+}
+
+.login-form button{
+    border:transparent;
+    border-radius: var(--radius);
+    background: var(--bleu-mz);
+    padding:var(--padding);
+    color:var(--blanc-mz);
+}
+
+.loading{
+    inset:0;
+    z-index: 2;
+    border:transparent;
+}
