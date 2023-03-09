@@ -319,13 +319,25 @@ function create_card(data){
         // Add total hours
         const status = document.createElement("p");
         status.className = "card-status";
-        status.append("Avancement "+Math.round((data.Total/data.client_hours)*100)+"%")
+        status.append("Temps chargés "+Math.round((data.Total/data.client_hours)*100)+"%")
 
         // Add progress bar
         const progress = document.createElement("progress");
         progress.className = "card-progress";
         progress.max = data.client_hours;
         progress.value = data.Total;
+
+        if (data.Total/data.client_hours > 0.3){
+            progress.style.setProperty("--progress-color", "#E4CE2C");
+        }
+        if (data.Total/data.client_hours > 0.5){
+            progress.style.setProperty("--progress-color", "#FF9900");
+        }
+        if (data.Total/data.client_hours > 0.8){
+            progress.style.setProperty("--progress-color", "#DF7F7F");
+        }
+
+        
 
         card.append(title);
         card.append(status);

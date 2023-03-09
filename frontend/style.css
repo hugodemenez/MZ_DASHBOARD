@@ -133,31 +133,7 @@ body{
     grid-row: 1/2;
 }
 
-.card{
-    position:relative;
-    flex-shrink: 0;
-    width:220px;
-    height:300px;
-    border-radius: 15px;
-    background: var(--bleu-mz);
-}
 
-.card:hover{
-    transform:scale(1.05);
-}
-
-.card-settings{
-    position:absolute;
-    top:15px;
-    right:15px;
-}
-
-.card-title{
-    color:var(--blanc-mz);
-    font-size: 24px;
-    font-weight:bold;
-    padding:var(--padding);
-}
 
 .nav-item{
     margin:0;
@@ -214,16 +190,49 @@ body{
     border:transparent;
 }
 
+.card{
+    position:relative;
+    flex-shrink: 0;
+    width:220px;
+    height:300px;
+    border-radius: 15px;
+    background: var(--bleu-mz);
+}
+
+.card:hover{
+    transform:scale(1.05);
+}
+
+.card-settings{
+    position:absolute;
+    top:15px;
+    right:15px;
+}
+
+.card-title{
+    color:var(--blanc-mz);
+    font-size: 24px;
+    font-weight:bold;
+    padding:var(--padding);
+}
+
 .card-status{
-    
+    padding-left:var(--padding);
+    color:var(--blanc-mz);
 }
 
-.card-progress{
+.card-progress {
+    border-radius: 7px; 
+    padding-left : 20px;
+    height: 5px;
 
 }
-
-.card-progress[value]{
-
+.card-progress::-webkit-progress-bar {
+background-color: var(--blanc-mz);
+border-radius: 7px;
 }
 
-
+.card-progress::-webkit-progress-value {
+background-color: var(--progress-color,#7FD7A7);
+border-radius: 7px;
+}
