@@ -337,11 +337,28 @@ function create_card(data){
             progress.style.setProperty("--progress-color", "#DF7F7F");
         }
 
-        
-
         card.append(title);
         card.append(status);
         card.append(progress);
+        zone1.prepend(card);
+    }
+    // Else it is not found in clients
+    else{
+        const card = document.createElement('div');
+        card.className = "card";
+
+        // Add title name
+        const title = document.createElement("h1");
+        title.className = "card-title";
+        title.append(data.AFFAIRES)
+
+        // Add total hours
+        const status = document.createElement("p");
+        status.className = "card-status";
+        status.append("Temps chargés : "+data.Total+"h")
+
+        card.append(title);
+        card.append(status);
         zone1.prepend(card);
     }
 }

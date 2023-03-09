@@ -55,10 +55,24 @@ body{
 
 .nav{
     display:flex;
-    justify-content: right;
+    flex-direction: column;
     margin: auto 0;
     grid-column: 1/2;
     grid-row: 2/4;
+    align-items: end;
+    gap:var(--margin);
+}
+
+.nav-item{
+    margin:0 auto;
+    padding-right: var(--margin);
+    width:90%;
+}
+
+.nav-item:hover{
+    border-right: solid 3px var(--bleu-mz);
+    stroke: var(--bleu-mz);
+
 }
 
 .header{
@@ -123,6 +137,7 @@ body{
     grid-row: 1/3;
     display:flex;
     flex-wrap: wrap;
+    justify-content:space-between;
     row-gap: 10px;
     column-gap:10px;
     overflow-y: scroll;
@@ -135,14 +150,7 @@ body{
 
 
 
-.nav-item{
-    margin:0;
-}
 
-.nav-item:hover{
-    fill:#0070CE;
-    border-right: solid 3px var(--noir-mz);
-}
 
 .login-dialog{
     inset: 0;
