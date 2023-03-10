@@ -91,6 +91,7 @@ body{
     align-items: flex-end;
     object-fit:scale-down;
     margin:var(--margin);
+    width:15%
 }
 
 .header .search-bar{
