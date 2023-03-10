@@ -28,7 +28,8 @@ function close_dialog_box(){
     fetch(request).then(function(response) {
         return response.json();
     }).then(function(response) {
-        console.log(response)
+        // Upload the data to the database
+        add_timetable_to_db(response);
         loading.close();
         try{
             response.forEach(element => {
@@ -37,9 +38,7 @@ function close_dialog_box(){
         }
         catch(error){
         }
-        // Upload the data to the database
-        console.log(response)
-        add_timetable_to_db(response);
+
     });
 }
 
@@ -63,32 +62,36 @@ function add_timetable_to_db(data){
 }
 
 function fetch_database(){
-    const clients_request = new Request("http://127.0.0.1:5000/getClients/", {
-        method: "GET",
-        mode: "cors",
-        cache: "default",
-    });
-    fetch(clients_request).then(function(response) {
-        return response
-    }).then(function(response) {
+    // fetch tasks
+    const tasks_request = get_tasks();
+    fetch(tasks_request).then(function(tasks_response) {
+        return tasks_response
+    }).then(function(tasks_response) {
         // if request is successful (code 200)
-        if (response.status==200){
-            response.json().then(function(data){
-                data.forEach(element => {
+        if (tasks_response.status==200){
+            tasks_response.json().then(function(tasks){
+                tasks.forEach(task => {
+                    create_task(task);
+                });
+            })
+        }
+    });
+    const clients_request = get_clients();
+    fetch(clients_request).then(function(clients_response) {
+        return clients_response
+    }).then(function(clients_response) {
+        // if request is successful (code 200)
+        if (clients_response.status==200){
+            clients_response.json().then(function(client){
+                client.forEach(element => {
                     clients.push(element);
                 });
-                const myHeaders = new Headers();
-                myHeaders.append("Content-Type", "application/json");
-                const request = new Request("http://127.0.0.1:5000/read_timetable_from_db/", {
-                    method: "GET",
-                    mode: "cors",
-                    cache: "default",
-                });
-                fetch(request).then(function(response) {
-                    return response
-                }).then(function(response) {
-                    if (response.status==200){
-                        response.json().then(function(data){
+                const timetable = get_timetable();
+                fetch(timetable).then(function(timetable_response) {
+                    return timetable_response
+                }).then(function(timetable_response) {
+                    if (timetable_response.status==200){
+                        timetable_response.json().then(function(data){
                             data.forEach(element => {
                                 create_card(element)
                             });
@@ -98,29 +101,56 @@ function fetch_database(){
             })
         }
         // if request is successful but no client in database (code 204)
-        if (response.status==204){
-            const myHeaders = new Headers();
-                myHeaders.append("Content-Type", "application/json");
-                const request = new Request("http://127.0.0.1:5000/read_timetable_from_db/", {
-                    method: "GET",
-                    mode: "cors",
-                    cache: "default",
-                });
-                fetch(request).then(function(response) {
-                    return response
-                }).then(function(response) {
-                    if (response.status==200){
-                        response.json().then(function(data){
-                            data.forEach(element => {
-                                create_card(element)
-                            });
-                        })
-                    }
-                });
+        if (clients_response.status==204){
+            const timetable_request = get_timetable();
+                fetch(timetable_request).then(function(timetable_response) {
+                    return timetable_response
+                }).then(function(timetable_response) {
+                    if (timetable_response.status==200){
+                        timetable_response.json().then(function(data){
+                        data.forEach(element => {
+                            create_card(element)
+                        });
+                    })
+                }
+            });
         }
     });
 }
 
+// get clients request
+function get_clients(){
+    const clients_request = new Request("http://127.0.0.1:5000/getClients/", {
+        method: "GET",
+        mode: "cors",
+        cache: "default",
+    });
+    return clients_request;
+}
+
+// get timetable request
+function get_timetable(){
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    const request = new Request("http://127.0.0.1:5000/read_timetable_from_db/", {
+        method: "GET",
+        mode: "cors",
+        cache: "default",
+    });
+    return request;
+}
+
+// get tasks request
+function get_tasks(){
+    const tasks_request = new Request("http://127.0.0.1:5000/get_tasks/", {
+        method: "GET",
+        mode: "cors",
+        cache: "default",
+    });
+    return tasks_request;
+}
+
+// This function create a card from the provided data
 function create_card(data){
     var is_client = false;
     clients.forEach(client => {
@@ -206,6 +236,7 @@ function create_card(data){
 
 }
 
+// This function allows to search in the cards
 function search_bar() {
     // Declare variables
     var input, filter, cards;
@@ -239,19 +270,44 @@ function add_agreementfiit_to_db(){
     fetch(request).then(function(response) {
         return response.json();
     }).then(function(response) {
-        console.log(response)
+        location.reload()
     });
 }
 
+// This function add a new task and push data to database
 function add_new_task(){
+    const task_content = document.getElementById('new-task-content');
+
+    updateTaskNumber();
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    const request = new Request("http://127.0.0.1:5000/upload_task_to_db/", {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify({
+            "content":task_content.innerText
+        }),
+        mode: "cors",
+        cache: "default",
+    });
+    
+    fetch(request).then(function(response) {
+        return response.json();
+    }).then(function(response) {
+        create_task({
+            content:task_content.innerText
+        })
+        // vanish text content
+        task_content.innerText = "";
+        //success toast
+    });
+}
+
+// This function create a task from the provided data
+function create_task(data){
     // get the text content
-    const textContent = document.getElementById('new-task-content').innerText;
+    const textContent = data.content;
 
-    // vanish text content
-    document.getElementById('new-task-content').innerText = "";
-
-
-    console.log(textContent)
     const task = document.createElement('div');
     task.className = "task";
 

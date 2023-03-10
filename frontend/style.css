@@ -99,10 +99,13 @@ body{
     width:50%;
     padding:10px;
     background:var(--gris-na-mz);
-    color:var(--gris-sombre-mz);
+    color:var(--noir-mz);
     font-size: medium;
 }
 
+.header .search-bar::placeholder{
+    color:var(--gris-sombre-mz);
+}
 
 .header .sync-data-btn{
     margin:10px;
@@ -152,6 +155,7 @@ body{
     margin: var(--margin);
     border-radius: var(--radius);
     position:relative;
+    overflow: hidden;
 }
 
 .zone2 .title{
@@ -209,6 +213,7 @@ body{
     resize: both;
     min-height: 40px;
     line-height: 20px;
+    text-align: justify;
 }
 
 .create-task .content:hover{
@@ -231,15 +236,19 @@ body{
     background:var(--bleu-mz);
     color:var(--blanc-mz);
     margin-left: auto; 
-    margin-right: 0;
+    margin-right: var(--margin);
 }
 
 .tasks{
+    position:relative;
+    overflow-y: scroll;
+    scroll-behavior: ;
     margin-top: var(--margin);
     display:flex;
     flex-direction: column;
-    gap:var(--margin);
+    row-gap:var(--margin);
     align-items: center;
+    height: 80%;
 }
 
 .task{
@@ -249,7 +258,6 @@ body{
     background:var(--gris-na-mz);
     border-radius: var(--radius);
     padding-left:var(--padding);
-    padding-right:var(--padding);
 }
 
 .login-dialog{
@@ -273,6 +281,10 @@ body{
     border-radius: var(--radius);
     background: var(--gris-na-mz);
     padding:var(--padding);
+    color:var(--noir-mz);
+}
+
+.login-form input::placeholder{
     color:var(--gris-sombre-mz);
 }
 

@@ -203,6 +203,82 @@ def initializer(
     """
     return "Hello World"
 
+class Task(BaseModel):
+    """Class model for params from API Post request"""
+    content: str
+
+@app.post("/upload_task_to_db/")
+def upload_task(
+    task : Task):
+    """API Post request to upload data to sqlite db
+
+    Args:
+        username (str): username 
+        password (str): password
+
+    Returns:
+        _type_: _description_
+    """
+
+    # Creates database connection (create db if not exists)
+    connection = sqlite3.connect("database.db")
+    cursor = connection.cursor()
+
+    sql_request = """CREATE TABLE IF NOT EXISTS tasks(content)"""
+    cursor.execute(sql_request)
+
+    sql_request = f"""INSERT INTO
+    tasks(content) 
+    VALUES("{task.content.replace('"',' ')}")
+    """
+    cursor.execute(sql_request)
+    connection.commit()
+    connection.close()
+    raise HTTPException(
+        status_code=200,
+        detail="Success",
+    )
+
+
+@app.get("/get_tasks/")
+def get_tasks():
+    """API get request to get data from sqlite db
+
+    Returns:
+        list: tasks list
+    """
+
+    # Creates database connection (create db if not exists)
+    connection = sqlite3.connect("database.db")
+    cursor = connection.cursor()
+    try:
+        # Getting columns names
+        sql_request = "PRAGMA table_info(tasks);"
+        result = cursor.execute(sql_request)
+        result = result.fetchall()
+        columns = [column_name for _,column_name,_,_,_,_ in result]
+
+        # Selecting values
+        sql_request = "SELECT * FROM tasks"
+        results = cursor.execute(sql_request)
+        results = results.fetchall()
+
+        output = []
+        for result in results:
+            dictionnary = {}
+            for value,column in zip(result,columns):
+                dictionnary[column] = value
+            output.append(dictionnary)
+        connection.close()
+        return output
+
+    except sqlite3.OperationalError as error:
+        connection.close()
+        raise HTTPException(
+            status_code=204,
+            detail="No data in database",
+        ) from error
+
 if __name__ == "__main__":
     # Loads the .env vars
     load_dotenv()
