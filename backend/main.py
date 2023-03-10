@@ -140,7 +140,6 @@ def upload_agreementfiit_data(
     sql_request = """CREATE TABLE IF NOT EXISTS client (name,hours)"""
     cursor.execute(sql_request)
     for file in files:
-        print(file.filename)
         agreement_fiit = pd.read_excel(file.file,sheet_name="data")
         file.file.close()
         total_heures = agreement_fiit[agreement_fiit.eq("total_heures").any(1)]
