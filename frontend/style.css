@@ -121,6 +121,18 @@ body{
     background:var(--bleu-fonce-mz);
 }
 
+.agreement-fiit-upload{
+    color:var(--blanc-mz);
+    background:var(--bleu-mz);
+    padding:var(--padding);
+    border-radius: var(--radius);
+    text-align: center;
+}
+
+.agreement-fiit-upload:hover{
+    background:var(--bleu-fonce-mz);
+}
+
 .dashboard{
     border-left: solid 1px var(--noir-mz);
     display:grid;

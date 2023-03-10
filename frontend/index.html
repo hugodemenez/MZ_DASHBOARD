@@ -38,10 +38,10 @@
     <div class="header">
         <input id="search-bar" onkeyup=search_bar() type="text" class="search-bar" placeholder="🔍 Rechercher un dossier...">
         <button class="sync-data-btn" id="open-login-dialog" onclick=open_dialog_box()  type="button">
-            Synchroniser 
+            Importer mes temps 
         </button>
-        
-        <input title="file uploader" type="file" name="" id="agreement-fiit" onchange=add_agreementfiit_to_db() accept=".xlsx">
+        <label class="agreement-fiit-upload"for="agreement-fiit">Import un Agreement FI'IT</label>
+        <input style="visibility:hidden;" title="file uploader" type="file" name="" id="agreement-fiit" onchange=add_agreementfiit_to_db() accept=".xlsx">
         <img src="./assets/logo.png" alt="logo mazars" class="logo">
     </div>
     <div class="dashboard">
