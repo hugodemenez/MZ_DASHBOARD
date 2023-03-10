@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<body>
+<body onload=fetch_database()>
     <dialog id="loading" class="loading"><img src="./assets/loading.gif" alt="" open></dialog>
     <dialog id="dialog-box" class="login-dialog">
         <form action="javascript:void(0);" class="login-form">
@@ -21,39 +21,49 @@
     </dialog>
 
     <div class="nav">
-        <svg class="nav-item" width="47" height="39" viewBox="0 0 47 39" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="black" stroke-width="1">
+        <svg class="nav-item" width="47" height="39" viewBox="0 0 47 39" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="black" stroke-width="2">
             <path d="M1 16.3933L20.4303 2.00291C22.2358 0.665696 24.7641 0.665696 26.5697 2.00291L46 16.3933M8.5 11.6322V33.0571C8.5 35.6866 10.7386 37.8182 13.5 37.8182H33.5C36.2614 37.8182 38.5 35.6866 38.5 33.0571V11.6322" stroke-linecap="round"/>
         </svg>
-            
-
-        <svg class="nav-item" width="47" height="48" viewBox="0 0 47 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="black" stroke-width="1">
-            <path d="M23.5 35.8749V35.8954M15.3182 19.5113C15.3182 14.9926 18.9813 11.3294 23.5 11.3294C28.0187 11.3294 31.6818 14.9926 31.6818 19.5113C31.6818 23.3311 29.0641 26.5396 25.5248 27.4406C24.43 27.7193 23.5 28.6089 23.5 29.7385M46 23.6022C46 36.0286 35.9264 46.1022 23.5 46.1022C11.0736 46.1022 1 36.0286 1 23.6022C1 11.1758 11.0736 1.10217 23.5 1.10217C35.9264 1.10217 46 11.1758 46 23.6022Z" stroke-linecap="round"/>
-            </svg>
-            
-        <svg class="nav-item" width="47" height="51" viewBox="0 0 47 51" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="black" stroke-width="1">
+        <svg class="nav-item" width="47" height="51" viewBox="0 0 47 51" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="black" stroke-width="2">
             <path d="M16.4073 5.97515C16.4073 3.67932 18.2685 1.81818 20.5643 1.81818H26.4355C28.7314 1.81818 30.5925 3.67933 30.5925 5.97518C30.5925 9.17524 34.0568 11.1752 36.8281 9.57521C38.8164 8.42726 41.3589 9.10848 42.5068 11.0968L45.4424 16.1813C46.5903 18.1696 45.9091 20.712 43.9208 21.8599C41.1494 23.46 41.1494 27.4601 43.9208 29.0601C45.9091 30.2081 46.5903 32.7505 45.4424 34.7388L42.5068 39.8233C41.3589 41.8116 38.8165 42.4928 36.8282 41.3449C34.0568 39.7448 30.5925 41.7449 30.5925 44.9451C30.5925 47.241 28.7313 49.1022 26.4354 49.1022H20.5644C18.2685 49.1022 16.4073 47.241 16.4073 44.9451C16.4073 41.745 12.9432 39.7449 10.1718 41.3449C8.18353 42.4928 5.64113 41.8116 4.4932 39.8233L1.55763 34.7388C0.409695 32.7505 1.09093 30.2081 3.07922 29.0601C5.85058 27.4601 5.85059 23.46 3.07922 21.8599C1.09093 20.712 0.409697 18.1696 1.55763 16.1813L4.4932 11.0967C5.64114 9.10846 8.18356 8.42724 10.1718 9.57517C12.9431 11.1752 16.4073 9.17519 16.4073 5.97515Z" />
             <path d="M32.9567 25.4602C32.9567 30.683 28.7228 34.917 23.4999 34.917C18.2771 34.917 14.0431 30.683 14.0431 25.4602C14.0431 20.2373 18.2771 16.0034 23.4999 16.0034C28.7228 16.0034 32.9567 20.2373 32.9567 25.4602Z" />
         </svg>
-                
-        <svg class="nav-item" width="43" height="43" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="black" stroke-width="1">
+        <svg class="nav-item" width="43" height="43" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="black" stroke-width="2">
             <path d="M1.5 17.3737H41.5M14.8333 6.26262H8.61111C6.12199 6.26262 4.87743 6.26262 3.92671 6.74704C3.09043 7.17314 2.41052 7.85305 1.98442 8.68933C1.5 9.64005 1.5 10.8846 1.5 13.3737V34.7071C1.5 37.1962 1.5 38.4408 1.98442 39.3915C2.41052 40.2277 3.09043 40.9077 3.92671 41.3338C4.87743 41.8182 6.12199 41.8182 8.61111 41.8182H34.3889C36.878 41.8182 38.1226 41.8182 39.0733 41.3338C39.9096 40.9077 40.5895 40.2277 41.0156 39.3915C41.5 38.4408 41.5 37.1962 41.5 34.7071V13.3737C41.5 10.8846 41.5 9.64005 41.0156 8.68933C40.5895 7.85305 39.9096 7.17314 39.0733 6.74704C38.1226 6.26262 36.878 6.26262 34.3889 6.26262H28.1667M14.8333 6.26262H28.1667M14.8333 6.26262V5.15151C14.8333 3.31056 13.341 1.81818 11.5 1.81818C9.65905 1.81818 8.16667 3.31056 8.16667 5.15151V6.26262M28.1667 6.26262V5.15151C28.1667 3.31056 29.6591 1.81818 31.5 1.81818C33.341 1.81818 34.8333 3.31056 34.8333 5.15151V6.26262" stroke-linecap="round"/>
         </svg>
-                    
-            
+        <svg class="nav-item" width="47" height="48" viewBox="0 0 47 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="black" stroke-width="2">
+            <path d="M23.5 35.8749V35.8954M15.3182 19.5113C15.3182 14.9926 18.9813 11.3294 23.5 11.3294C28.0187 11.3294 31.6818 14.9926 31.6818 19.5113C31.6818 23.3311 29.0641 26.5396 25.5248 27.4406C24.43 27.7193 23.5 28.6089 23.5 29.7385M46 23.6022C46 36.0286 35.9264 46.1022 23.5 46.1022C11.0736 46.1022 1 36.0286 1 23.6022C1 11.1758 11.0736 1.10217 23.5 1.10217C35.9264 1.10217 46 11.1758 46 23.6022Z" stroke-linecap="round"/>
+        </svg>
     </div>
     <div class="header">
         <input id="search-bar" onkeyup=search_bar() type="text" class="search-bar" placeholder="🔍 Rechercher un dossier...">
         <button class="sync-data-btn" id="open-login-dialog" onclick=open_dialog_box()  type="button">
             Synchroniser 
         </button>
-        <input type="file" name="" id="agreement-fiit" onchange=add_agreementfiit_to_db() accept=".xlsx">
+        
+        <input title="file uploader" type="file" name="" id="agreement-fiit" onchange=add_agreementfiit_to_db() accept=".xlsx">
         <img src="./assets/logo.png" alt="logo mazars" class="logo">
     </div>
     <div class="dashboard">
         <div id="zone1" class="zone1">
+
         </div>
         <div class="zone2">
-            <h1>Tâches</h1>
+            <div class="title">
+                <h1>Tâches</h1>
+                <p class="task-quantity" id="task-quantity">0</p>
+            </div>
+            <svg class="task-settings" width="8" height="28" viewBox="0 0 8 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="4" cy="4" r="4" />
+            <circle cx="4" cy="14" r="4" />
+            <circle cx="4" cy="24" r="4"/>
+            </svg>
+            <div class="create-task">
+                <span class="content" role="textbox" contenteditable id="new-task-content"></span>
+                <button type="submit" class="add-task-btn"onclick=add_new_task()>Ajouter</button>
+            </div>
+            <div class="tasks" id="tasks">
+            </div>
         </div>
     </div>
 </body>

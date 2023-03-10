@@ -1,8 +1,8 @@
 const dialog = document.getElementById("dialog-box")
 const zone1 = document.getElementById("zone1");
-
+const tasks = document.getElementById("tasks");
 const loading = document.getElementById("loading")
-
+const clients = []
 
 function open_dialog_box(){
     dialog.showModal();
@@ -28,6 +28,7 @@ function close_dialog_box(){
     fetch(request).then(function(response) {
         return response.json();
     }).then(function(response) {
+        console.log(response)
         loading.close();
         try{
             response.forEach(element => {
@@ -35,9 +36,10 @@ function close_dialog_box(){
             });
         }
         catch(error){
-            console.log(error);
         }
-        add_timetable_to_db(response)
+        // Upload the data to the database
+        console.log(response)
+        add_timetable_to_db(response);
     });
 }
 
@@ -61,252 +63,85 @@ function add_timetable_to_db(data){
 }
 
 function fetch_database(){
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    const request = new Request("http://127.0.0.1:5000/read_timetable_from_db/", {
+    const clients_request = new Request("http://127.0.0.1:5000/getClients/", {
         method: "GET",
         mode: "cors",
         cache: "default",
     });
-    fetch(request).then(function(response) {
+    fetch(clients_request).then(function(response) {
         return response
     }).then(function(response) {
+        // if request is successful (code 200)
         if (response.status==200){
             response.json().then(function(data){
                 data.forEach(element => {
-                    create_card(element)
+                    clients.push(element);
+                });
+                const myHeaders = new Headers();
+                myHeaders.append("Content-Type", "application/json");
+                const request = new Request("http://127.0.0.1:5000/read_timetable_from_db/", {
+                    method: "GET",
+                    mode: "cors",
+                    cache: "default",
+                });
+                fetch(request).then(function(response) {
+                    return response
+                }).then(function(response) {
+                    if (response.status==200){
+                        response.json().then(function(data){
+                            data.forEach(element => {
+                                create_card(element)
+                            });
+                        })
+                    }
                 });
             })
+        }
+        // if request is successful but no client in database (code 204)
+        if (response.status==204){
+            const myHeaders = new Headers();
+                myHeaders.append("Content-Type", "application/json");
+                const request = new Request("http://127.0.0.1:5000/read_timetable_from_db/", {
+                    method: "GET",
+                    mode: "cors",
+                    cache: "default",
+                });
+                fetch(request).then(function(response) {
+                    return response
+                }).then(function(response) {
+                    if (response.status==200){
+                        response.json().then(function(data){
+                            data.forEach(element => {
+                                create_card(element)
+                            });
+                        })
+                    }
+                });
         }
     });
 }
 
-fetch_database();
-
-clients = [
-    {name:"Bonduelle",
-hours:50,},
-{name:"MON ABRI / LOGIS",
-hours:50,},
-{name:"MON ABRI / hdn",
-hours:50,},
-{name:"JUNIA",
-hours:50,},
-{name:"ADEO/LM",
-hours:50,},
-{name:"DECATHLON",
-hours:50,},
-{name:"Camaieu (FIB NC7)",
-hours:50,},
-{name:"NORAUTO",
-hours:50,},
-{name:"MIDAS",
-hours:50,},
-{name:"KIABI",
-hours:50,},
-{name:"DRIVECO",
-hours:50,},
-{name:"Square Habitat",
-hours:50,},
-{name:"Sitour",
-hours:50,},
-{name:"Rabot Dutilleul",
-hours:50,},
-{name:"GENERIX",
-hours:50,},
-{name:"FORMASUP NPC",
-hours:50,},
-{name:"Pronal",
-hours:50,},
-{name:"Eurodatacar",
-hours:50,},
-{name:"Polyfont",
-hours:50,},
-{name:"IRCEM ",
-hours:50,},
-{name:"EUROTUNNEL",
-hours:50,},
-{name:"Ecobureautique",
-hours:50,},
-{name:"SORELI",
-hours:50,},
-{name:"Camif",
-hours:50,},
-{name:"Tikamoon",
-hours:50,},
-{name:"Weldom",
-hours:50,},
-{name:"Zodio",
-hours:50,},
-{name:"Alice délice",
-hours:50,},
-{name:"ADVENS",
-hours:50,},
-{name:"Cofidis",
-hours:50,},
-{name:"Crédit Mutuel Nord Europe",
-hours:50,},
-{name:"ICL",
-hours:50,},
-{name:"Alma",
-hours:50,},
-{name:"Centre Feron Vrau",
-hours:50,},
-{name:"BPCE",
-hours:50,},
-{name:"Francelot",
-hours:50,},
-{name:"Gedimat",
-hours:50,},
-{name:"Vesuvius ",
-hours:50,},
-{name:"EDHEC",
-hours:50,},
-{name:"GAPAS",
-hours:50,},
-{name:"Beck Technologies",
-hours:50,},
-{name:"Lesaffre",
-hours:50,},
-{name:"CIVAD",
-hours:50,},
-{name:"TRENOIS DECAMPS",
-hours:50,},
-{name:"Agepar",
-hours:50,},
-{name:"Société du Canal Seine Nord Europe 31.12.2020",
-hours:50,},
-{name:"TRANSITIONS PRO (ex FONGECIF)",
-hours:50,},
-{name:"Centre Oscar Lambret",
-hours:50,},
-{name:"LAC",
-hours:50,},
-{name:"VIAPOST",
-hours:50,},
-{name:"ROCHEFORT",
-hours:50,},
-{name:"MEO",
-hours:50,},
-{name:"Clayrton's",
-hours:50,},
-{name:"Resto du Cœur",
-hours:50,},
-{name:"GMD",
-hours:50,},
-{name:"M2W",
-hours:50,},
-{name:"SAFE DEMO",
-hours:50,},
-{name:"TERRITOIRES 62",
-hours:50,},
-{name:"INAPA",
-hours:50,},
-{name:"ATOS",
-hours:50,},
-{name:"DOUBLET",
-hours:50,},
-{name:"DEVCOT",
-hours:50,},
-{name:"STA - Société de Transmissions Automatiques (Gaël Lamant - Paris)",
-hours:50,},
-{name:"IESEG",
-hours:50,},
-{name:"ASSOCIATION DIOCESAINE D'ARRAS",
-hours:50,},
-{name:"UPHF - Université Polytechnique Hauts-de-France",
-hours:50,},
-{name:"ASTRADEC",
-hours:50,},
-{name:"TG GRISET",
-hours:50,},
-{name:"NICODEME",
-hours:50,},
-{name:"KREA",
-hours:50,},
-{name:"SFMG",
-hours:50,},
-{name:"THEYS",
-hours:50,},
-{name:"ARELI",
-hours:50,},
-{name:"Nicols",
-hours:50,},
-{name:"SECO",
-hours:50,},
-{name:"CORSICA SOLE",
-hours:50,},
-{name:"Crédit municipal de Lille",
-hours:50,},
-{name:"EXEL",
-hours:50,},
-{name:"INSA HAUTS-DE-FRANCE",
-hours:50,},
-{name:"CRFPE",
-hours:50,},
-{name:"SOLARONICS",
-hours:50,},
-{name:"ORFITE",
-hours:50,},
-{name:"ESJ",
-hours:50,},
-{name:"BDL",
-hours:50,},
-{name:"Financière Gérard Faivre",
-hours:50,},
-{name:"Bouygues",
-hours:50,},
-{name:"SOLUTION FINANCE",
-hours:50,},
-{name:"BARENTZ FRANCE",
-hours:50,},
-{name:"STEREOGRAPH",
-hours:50,},
-{name:"ABM PHARMA NORD",
-hours:50,},
-{name:"EAR",
-hours:50,},
-{name:"Logs",
-hours:50,},
-{name:"Nextedia",
-hours:50,},
-{name:"GBS",
-hours:50,},
-{name:"Van Marcke",
-hours:50,},
-{name:"Société européénne de développement d'assurance",
-hours:50,},
-{name:"MINDSTON",
-hours:50,},
-{name:"Ecole Centrale Lille",
-hours:50,},
-{name:"SOREHAL",
-hours:50,},
-{name:"Triselec",
-hours:50,},
-{name:"Oney",
-hours:50,},
-{name:"Cabre",
-hours:50,},
-{name:"Scell it",
-hours:50,},
-{name:"Light Online",
-hours:50,},
-{name:"Tetrosyl",
-hours:50,},
-{name:"QHF",
-hours:50,},
-]
-
 function create_card(data){
     var is_client = false;
     clients.forEach(client => {
+        // Format client name (agreement fiit find word beofre space)
+        if (client.name.includes(" ")){
+            client.name = client.name.substring(0,client.name.indexOf(' '));
+            console.log("Agreement FI'IT trouvé : "+client.name)
+        }
+
         if (data.AFFAIRES.toUpperCase().includes(client.name.toUpperCase())){
             is_client = true;
             data.client = client.name;
             data.client_hours = client.hours;
         }
     });
+
+    if(data.AFFAIRES.includes("-")){
+        data.AFFAIRES = data.AFFAIRES.split("-")[1]
+    }
+
+    // If it is a known client
     if (is_client){
         const card = document.createElement('div');
         card.className = "card";
@@ -314,12 +149,15 @@ function create_card(data){
         // Add title name
         const title = document.createElement("h1");
         title.className = "card-title";
-        title.append(data.client)
+        title.append(data.AFFAIRES)
+
 
         // Add total hours
         const status = document.createElement("p");
         status.className = "card-status";
-        status.append("Temps chargés "+Math.round((data.Total/data.client_hours)*100)+"%")
+        status.append("Temps chargés : ")
+        status.append(document.createElement("br"))
+        status.append(data.Total + "h / " + data.client_hours + "h")
 
         // Add progress bar
         const progress = document.createElement("progress");
@@ -338,11 +176,14 @@ function create_card(data){
         }
 
         card.append(title);
+        status.append(document.createElement("br"))
+        status.append(progress);
+
         card.append(status);
-        card.append(progress);
+
         zone1.prepend(card);
     }
-    // Else it is not found in clients
+    // Else it is an unknown client
     else{
         const card = document.createElement('div');
         card.className = "card";
@@ -361,27 +202,9 @@ function create_card(data){
         card.append(status);
         zone1.prepend(card);
     }
-}
 
-// This function add the data to the database
-function add_client_to_db(data){
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    const request = new Request("http://127.0.0.1:5000/upload_client_to_db/", {
-        method: "POST",
-        headers: myHeaders,
-        body: JSON.stringify(data),
-        mode: "cors",
-        cache: "default",
-    });
-    
-    fetch(request).then(function(response) {
-        return response.json();
-    }).then(function(response) {
-        console.log(response)
-    });
-}
 
+}
 
 function search_bar() {
     // Declare variables
@@ -400,8 +223,6 @@ function search_bar() {
         }
     }
 }
-
-
 
 // This function add the data to the database
 function add_agreementfiit_to_db(){
@@ -422,3 +243,39 @@ function add_agreementfiit_to_db(){
     });
 }
 
+function add_new_task(){
+    // get the text content
+    const textContent = document.getElementById('new-task-content').innerText;
+
+    // vanish text content
+    document.getElementById('new-task-content').innerText = "";
+
+
+    console.log(textContent)
+    const task = document.createElement('div');
+    task.className = "task";
+
+    // Add check box
+    const checkbox = document.createElement("input");
+    checkbox.className = "task-status";
+    checkbox.type = "checkbox";
+
+    // Add task content
+    const content = document.createElement("p");
+    content.className = "task-content";
+    content.append(textContent)
+
+
+
+    task.append(checkbox);
+    task.append(content);
+    tasks.prepend(task);
+    updateTaskNumber();
+}
+
+//update task number
+function updateTaskNumber(){
+    var taskNumber = document.getElementById('tasks');
+    taskNumber = taskNumber.childElementCount;
+    document.getElementById('task-quantity').innerText = taskNumber;
+}

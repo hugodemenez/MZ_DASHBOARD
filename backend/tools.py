@@ -172,9 +172,10 @@ def read_excel_file(*, path:str):
     logger.info("Reading the excel file")
     try:
         dataframe = pd.read_excel(f"{path}", engine="xlrd",sheet_name=2)
-        os.remove(path)
+        #os.remove(path)
         dataframe = dataframe.rename(columns=dataframe.iloc[0]).loc[1:]
         dataframe = dataframe[["AFFAIRES","Total"]]
+
         return json.loads(dataframe.to_json(orient="records"))
 
     except FileNotFoundError as exception:
