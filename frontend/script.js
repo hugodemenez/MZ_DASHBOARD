@@ -4,6 +4,37 @@ const tasks = document.getElementById("tasks");
 const loading = document.getElementById("loading")
 const clients = []
 
+
+function groupBy(list, property) {
+    return list.reduce((result, item) => {
+    const key = item[property];
+    if (!result[key]) {
+    result[key] = [];
+    }
+    result[key].push(item);
+    return result;
+}, {});
+}
+
+function concatElementsOnKey(data,key){
+    var list = [];
+    for (value in (data)){
+        item = data[value][0];
+        total = 0;
+        for (i in item){
+            var total = parseInt(total) + parseInt(item[key]);
+        }
+        item[key] = total;
+        list.push(item);
+    }
+    return list;
+}
+
+function groupTimetableOnAffaire(timetable){
+    return concatElementsOnKey(groupBy(timetable, "AFFAIRES"),"Total");
+}
+
+// Function to open the dialog box
 function open_dialog_box(){
     dialog.showModal();
 }
@@ -57,7 +88,7 @@ function add_timetable_to_db(data){
     fetch(request).then(function(response) {
         return response.json();
     }).then(function(response) {
-        console.log(response)
+        showToast("Contenu ajouté à la base de données");
     });
 }
 
@@ -86,13 +117,13 @@ function fetch_database(){
                 client.forEach(element => {
                     clients.push(element);
                 });
-                const timetable = get_timetable();
-                fetch(timetable).then(function(timetable_response) {
+                const timetable_request = get_timetable();
+                fetch(timetable_request).then(function(timetable_response) {
                     return timetable_response
                 }).then(function(timetable_response) {
                     if (timetable_response.status==200){
                         timetable_response.json().then(function(data){
-                            data.forEach(element => {
+                            groupTimetableOnAffaire(data).forEach(element => {
                                 create_card(element)
                             });
                         })
@@ -108,7 +139,7 @@ function fetch_database(){
                 }).then(function(timetable_response) {
                     if (timetable_response.status==200){
                         timetable_response.json().then(function(data){
-                        data.forEach(element => {
+                            groupTimetableOnAffaire(data).forEach(element => {
                             create_card(element)
                         });
                     })
@@ -257,9 +288,11 @@ function search_bar() {
 
 // This function add the data to the database
 function add_agreementfiit_to_db(){
-    let file = document.getElementById("agreement-fiit").files[0];
+    let files = document.getElementById("agreement-fiit").files;
     let formData = new FormData();
-    formData.append("files", file);
+    for (let i = 0; i < files.length; i++) {
+        formData.append('files', files[i]);
+    }
     const request = new Request("http://127.0.0.1:5000/uploadfiles", {
         method: "POST",
         body: formData,
@@ -271,6 +304,7 @@ function add_agreementfiit_to_db(){
         return response.json();
     }).then(function(response) {
         location.reload()
+        showToast("Agreement FI'IT ajouté !")
     });
 }
 
@@ -278,7 +312,6 @@ function add_agreementfiit_to_db(){
 function add_new_task(){
     const task_content = document.getElementById('new-task-content');
 
-    updateTaskNumber();
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     const request = new Request("http://127.0.0.1:5000/upload_task_to_db/", {
@@ -292,14 +325,25 @@ function add_new_task(){
     });
     
     fetch(request).then(function(response) {
-        return response.json();
+        return response;
     }).then(function(response) {
-        create_task({
-            content:task_content.innerText
-        })
+        if (response.status == 200){
+            create_task({
+                content:task_content.innerText
+            })
+            //success toast
+            showToast("Tâche ajoutée !")
+        }
+        else{
+            //error toast
+            showToast("La tâche existe déjà !")
+
+        }
+
+
         // vanish text content
         task_content.innerText = "";
-        //success toast
+
     });
 }
 
@@ -311,18 +355,21 @@ function create_task(data){
     const task = document.createElement('div');
     task.className = "task";
 
-    // Add check box
-    const checkbox = document.createElement("input");
-    checkbox.className = "task-status";
-    checkbox.type = "checkbox";
-
     // Add task content
     const content = document.createElement("p");
     content.className = "task-content";
     content.append(textContent)
 
-
-
+    // Add check box
+    const checkbox = document.createElement("input");
+    checkbox.className = "task-status";
+    checkbox.type = "checkbox";
+    checkbox.onclick = function(){
+        content.style.textDecoration = "line-through";
+        delete_task(data.content);
+        // fix once checked
+        checkbox.onclick = function(){return false;}
+    }
     task.append(checkbox);
     task.append(content);
     tasks.prepend(task);
@@ -334,4 +381,41 @@ function updateTaskNumber(){
     var taskNumber = document.getElementById('tasks');
     taskNumber = taskNumber.childElementCount;
     document.getElementById('task-quantity').innerText = taskNumber;
+}
+
+//delete task
+function delete_task(taskContent){
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    const request = new Request("http://127.0.0.1:5000/delete_task_from_db/", {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify({
+            "content":taskContent
+        }),
+        mode: "cors",
+        cache: "default",
+    });
+    
+    fetch(request).then(function(response) {
+        return response;
+    }).then(function(response) {
+        if (response.status == 200){
+            //success toast
+        }
+        else{
+            //error toast
+
+        }
+    });
+}
+
+
+function showToast(message) {
+    const toast = document.querySelector('.toast');
+    toast.innerText = message;
+    toast.style.display = 'block';
+    setTimeout(function() {
+    toast.style.display = 'none';
+}, 3000);
 }
