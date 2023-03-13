@@ -330,9 +330,13 @@ body{
 }
 
 .loading{
+    display:none;
     inset:0;
     z-index: 2;
     border:transparent;
+    background:transparent;
+    height:25%;
+    padding:var(--padding);
 }
 
 .card{

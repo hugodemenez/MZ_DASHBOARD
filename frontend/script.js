@@ -2,7 +2,7 @@ const dialog = document.getElementById("dialog-box")
 const modal_overlay = document.querySelector(".modal-overlay")
 const zone1 = document.getElementById("zone1");
 const tasks = document.getElementById("tasks");
-const loading = document.getElementById("loading")
+const loading = document.querySelector(".loading")
 const clients = []
 
 
@@ -63,7 +63,7 @@ function submit_dialog_box(){
         mode: "cors",
         cache: "default",
     });
-    loading.show();
+    loading.style.display = "block";
     fetch(request).then(function(response) {
         return response.json();
     }).then(function(response) {
@@ -92,7 +92,7 @@ function add_timetable_to_db(data){
         mode: "cors",
         cache: "default",
     });
-    loading.close();
+    loading.style.display = "none";
     fetch(request).then(function(response) {
         return response.json();
     }).then(function(response) {

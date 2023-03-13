@@ -14,7 +14,6 @@
 <body onload=fetch_database()>
     <!-- Modal overlay -->
     <div class="modal-overlay"></div>
-    <dialog id="loading" class="loading"><img src="./assets/loading.gif" alt="" open></dialog>
     <dialog id="dialog-box" class="login-dialog">
         <form action="javascript:void(0);" class="login-form" autocomplete="on">
             <div class="dialog-close" onclick=toogle_dialog_box()>X</div>
@@ -41,6 +40,7 @@
     </div>
     <div class="header">
         <input id="search-bar" onkeyup=search_bar() type="text" class="search-bar" placeholder="🔍 Rechercher un dossier...">
+        <img src="./assets/loading.gif" alt="loading" class="loading">
         <button class="sync-data-btn" id="open-login-dialog" onclick=toogle_dialog_box()  type="button">
             Importer mes temps 
         </button>
