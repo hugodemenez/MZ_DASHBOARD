@@ -12,17 +12,20 @@
 </head>
 
 <body onload=fetch_database()>
+    <!-- Modal overlay -->
+    <div class="modal-overlay"></div>
     <dialog id="loading" class="loading"><img src="./assets/loading.gif" alt="" open></dialog>
     <dialog id="dialog-box" class="login-dialog">
-        <form action="javascript:void(0);" class="login-form">
+        <form action="javascript:void(0);" class="login-form" autocomplete="on">
+            <div class="dialog-close" onclick=toogle_dialog_box()>X</div>
             <input type="text" id="username" placeholder="Identifiant" required>
             <input type="password" id="password"  placeholder="Mot de passe" required>
-            <button onclick=close_dialog_box()  type="submit">Se connecter</button>
+            <button onclick=submit_dialog_box() class="login-dialog-btn" type="submit">Se connecter</button>
         </form>
     </dialog>
 
     <div class="nav">
-        <svg class="nav-item" width="47" height="39" viewBox="0 0 47 39" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="black" stroke-width="2">
+        <svg class="nav-item  active" width="47" height="39" viewBox="0 0 47 39" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="black" stroke-width="2">
             <path d="M1 16.3933L20.4303 2.00291C22.2358 0.665696 24.7641 0.665696 26.5697 2.00291L46 16.3933M8.5 11.6322V33.0571C8.5 35.6866 10.7386 37.8182 13.5 37.8182H33.5C36.2614 37.8182 38.5 35.6866 38.5 33.0571V11.6322" stroke-linecap="round"/>
         </svg>
         <svg class="nav-item" width="47" height="51" viewBox="0 0 47 51" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="black" stroke-width="2">
@@ -38,10 +41,10 @@
     </div>
     <div class="header">
         <input id="search-bar" onkeyup=search_bar() type="text" class="search-bar" placeholder="🔍 Rechercher un dossier...">
-        <button class="sync-data-btn" id="open-login-dialog" onclick=open_dialog_box()  type="button">
+        <button class="sync-data-btn" id="open-login-dialog" onclick=toogle_dialog_box()  type="button">
             Importer mes temps 
         </button>
-        <label class="agreement-fiit-upload"for="agreement-fiit">Import un Agreement FI'IT</label>
+        <label class="agreement-fiit-upload"for="agreement-fiit">Importer des Agreements FI'IT</label>
         <input style="visibility:hidden;" title="file uploader" type="file" name="" id="agreement-fiit" onchange=add_agreementfiit_to_db() accept=".xlsx" multiple>
         <img src="./assets/logo.png" alt="logo mazars" class="logo">
     </div>

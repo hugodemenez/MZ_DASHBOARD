@@ -1,4 +1,5 @@
 const dialog = document.getElementById("dialog-box")
+const modal_overlay = document.querySelector(".modal-overlay")
 const zone1 = document.getElementById("zone1");
 const tasks = document.getElementById("tasks");
 const loading = document.getElementById("loading")
@@ -34,13 +35,26 @@ function groupTimetableOnAffaire(timetable){
     return concatElementsOnKey(groupBy(timetable, "AFFAIRES"),"Total");
 }
 
+// Function to remove overlay when dialog is closed
+dialog.addEventListener('close', function() {
+    modal_overlay.style.display = ""
+});
+
 // Function to open the dialog box
-function open_dialog_box(){
-    dialog.showModal();
+function toogle_dialog_box(){
+    if (dialog.open){
+        dialog.close();
+        modal_overlay.style.display = ""
+    }
+    else{
+        modal_overlay.style.display = "block"
+        dialog.showModal();
+    }
 }
 
-// This function close the dialog box and create cards from data fetched from the server, then add the data to the database
-function close_dialog_box(){
+// This function close the dialog box and create cards 
+// from data fetched from the server, then add the data to the database
+function submit_dialog_box(){
     dialog.close();
     const content = {
         "username": document.getElementById("username").value,
@@ -59,17 +73,17 @@ function close_dialog_box(){
     fetch(request).then(function(response) {
         return response.json();
     }).then(function(response) {
+        // clean response
+        response = response.filter(
+            function(item){
+                return !(item.AFFAIRES.toUpperCase().includes("TOTAL"));
+            }
+        )
+        response.forEach(element => {
+            element["username"]=content.username;
+        })
         // Upload the data to the database
         add_timetable_to_db(response);
-        loading.close();
-        try{
-            response.forEach(element => {
-                create_card(element);
-            });
-        }
-        catch(error){
-        }
-
     });
 }
 
@@ -84,11 +98,12 @@ function add_timetable_to_db(data){
         mode: "cors",
         cache: "default",
     });
-    
+    loading.close();
     fetch(request).then(function(response) {
         return response.json();
     }).then(function(response) {
         showToast("Contenu ajouté à la base de données");
+        fetch_database();
     });
 }
 
@@ -419,6 +434,7 @@ function showToast(message,status) {
 
 
     const closeButton = document.createElement("button");
+    closeButton.className = "toast-close";
     closeButton.innerHTML = "X";
     closeButton.onclick = function(){
         toast.style.display = 'none';

@@ -67,13 +67,18 @@ body{
 .nav-item{
     margin:0 auto;
     padding-right: var(--margin);
-    width:90%;
+    box-sizing: border-box;
+    width:100%;
 }
 
 .nav-item:hover{
-    border-right: solid 3px var(--bleu-mz);
     stroke: var(--bleu-mz);
 
+}
+
+.active{
+    border-right: solid 3px var(--bleu-mz);
+    stroke: var(--bleu-mz);
 }
 
 .header{
@@ -280,7 +285,7 @@ body{
 
 .login-dialog{
     inset: 0;
-    z-index: 1;
+    z-index: 81;
     border:none;
     border-radius: var(--radius);
 }
@@ -291,6 +296,15 @@ body{
     justify-content: center;
     align-items: center;
     gap:var(--margin);
+}
+
+.login-form .dialog-close{
+    cursor:pointer;
+    align-self: flex-end;
+    color:var(--noir-mz);
+    right:var(--margin);
+    background:none;
+    border:none;
 }
 
 .login-form input{
@@ -305,7 +319,7 @@ body{
     color:var(--gris-sombre-mz);
 }
 
-.login-form button{
+.login-form .login-dialog-btn{
     border:transparent;
     border-radius: var(--radius);
     background: var(--bleu-mz);
@@ -313,13 +327,10 @@ body{
     color:var(--blanc-mz);
 }
 
-.login-form button{
-    border:transparent;
-    border-radius: var(--radius);
-    background: var(--bleu-mz);
-    padding:var(--padding);
-    color:var(--blanc-mz);
+.login-form .login-dialog-btn:hover{
+    background: var(--bleu-fonce-mz);
 }
+
 
 .loading{
     inset:0;
@@ -334,6 +345,7 @@ body{
     height:300px;
     border-radius: 15px;
     background: var(--bleu-mz);
+    padding:var(--padding);
 }
 
 .card:hover{
@@ -350,7 +362,7 @@ body{
     color:var(--blanc-mz);
     font-size: 24px;
     font-weight:bold;
-    padding:var(--padding);
+    text-align: left;
 }
 
 .card-status{
@@ -392,10 +404,20 @@ border-radius: var(--radius);
     font-size: 16px;
 }
 
-.toast button{
+.toast .toast-close{
     position:absolute;
     right:var(--margin);
     background:none;
     border:none;
 }
 
+.modal-overlay {
+    display: none; /* Masquer le fond modal par défaut */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Couleur semi-transparente noire */
+    z-index: 80; /* Une valeur de z-index élevée pour s'assurer que le fond modal est au-dessus de tout autre contenu */
+}

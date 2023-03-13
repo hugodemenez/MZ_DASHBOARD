@@ -67,12 +67,15 @@ def upload_timetable(
     connection = sqlite3.connect("database.db")
     cursor = connection.cursor()
 
-    sql_request = """CREATE TABLE IF NOT EXISTS timetable (AFFAIRES,Total,PRIMARY KEY (AFFAIRES))"""
+    sql_request = """CREATE TABLE IF NOT EXISTS timetable
+    (AFFAIRES,Total,username,PRIMARY KEY (AFFAIRES,username))
+    """
     cursor.execute(sql_request)
     for item in data:
         sql_request = f"""INSERT INTO
-        timetable(AFFAIRES,Total) 
-        VALUES('{item.get("AFFAIRES",None)}','{item.get("Total",None)}')
+        timetable(AFFAIRES,Total,username) 
+        VALUES('{item.get("AFFAIRES",None)}','{item.get("Total",None)}','{item.get("username",None)}')
+        ON CONFLICT (AFFAIRES,username) DO UPDATE SET Total='{item.get("Total",None)}';
         """
         cursor.execute(sql_request)
     connection.commit()
