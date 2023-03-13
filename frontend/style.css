@@ -224,7 +224,7 @@ body{
     display: block;
     width: 100%;
     overflow: hidden;
-    resize: both;
+    resize:vertical;
     min-height: 40px;
     line-height: 20px;
     text-align: justify;
@@ -239,7 +239,7 @@ body{
 }
 
 .create-task .content[contenteditable]:empty::before {
-    content: "Nom de la tâche";
+    content: "Intitulé de la tâche";
     color: gray;
 }
 
@@ -282,7 +282,6 @@ body{
     inset: 0;
     z-index: 1;
     border:none;
-    opacity: 0.9;
     border-radius: var(--radius);
 }
 
@@ -382,8 +381,21 @@ border-radius: var(--radius);
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background-color: #333;
-    color: #fff;
+    width:10%;
+    background:var(--blanc-mz);
+    color: var(--noir-mz);
     padding: 15px;
-    border-radius: 5px;
+    border-radius: var(--radius);
 }
+
+.toast h1{
+    font-size: 16px;
+}
+
+.toast button{
+    position:absolute;
+    right:var(--margin);
+    background:none;
+    border:none;
+}
+

@@ -336,7 +336,7 @@ function add_new_task(){
         }
         else{
             //error toast
-            showToast("La tâche existe déjà !")
+            showToast("La tâche existe déjà !",status="error")
 
         }
 
@@ -368,7 +368,8 @@ function create_task(data){
         content.style.textDecoration = "line-through";
         delete_task(data.content);
         // fix once checked
-        checkbox.onclick = function(){return false;}
+        checkbox.onclick = function(){
+            return false;}
     }
     task.append(checkbox);
     task.append(content);
@@ -402,20 +403,53 @@ function delete_task(taskContent){
     }).then(function(response) {
         if (response.status == 200){
             //success toast
+            showToast("Tâche supprimée !");
         }
         else{
             //error toast
-
+            showToast("Erreur dans la base de données !");
         }
     });
 }
 
-
-function showToast(message) {
+// Toast creation
+function showToast(message,status) {
     const toast = document.querySelector('.toast');
-    toast.innerText = message;
+    toast.innerHTML="";
+
+
+    const closeButton = document.createElement("button");
+    closeButton.innerHTML = "X";
+    closeButton.onclick = function(){
+        toast.style.display = 'none';
+    };
+    toast.append(closeButton)
+
+
+    if (status == 'success') {
+        const title = document.createElement("h1");
+        title.innerHTML = "Succès";
+        toast.append(title);
+        toast.style.border = "solid var(--vert-ok-mz) 2px";
+    }
+    else if (status == 'error') {
+        const title = document.createElement("h1");
+        title.innerHTML = "Erreur";
+        toast.append(title);
+        toast.style.border = "solid var(--rouge-erreur-mz) 2px";
+    }
+    else{
+        const title = document.createElement("h1");
+        title.innerHTML = "Notification";
+        toast.append(title);
+        toast.style.border = "solid var(--orange-majeur-mz) 2px";
+    }
+    const content = document.createElement("p");
+    content.innerHTML = message;
+    toast.append(content);
     toast.style.display = 'block';
     setTimeout(function() {
-    toast.style.display = 'none';
-}, 3000);
+        toast.style.display = 'none';
+    }, 6000);
+
 }
