@@ -391,7 +391,7 @@ border-radius: var(--radius);
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width:10%;
+    width:20%;
     background:var(--blanc-mz);
     color: var(--noir-mz);
     padding: 15px;
@@ -403,6 +403,7 @@ border-radius: var(--radius);
 }
 
 .toast .toast-close{
+    cursor:pointer;
     position:absolute;
     right:var(--margin);
     background:none;

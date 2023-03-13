@@ -102,9 +102,11 @@ function add_timetable_to_db(data){
 
 function fetch_database(){
     // fetch tasks
-    fetch(get_tasks()).then(function(tasks_response) {
+    fetch(get_tasks())
+    .then(function(tasks_response) {
         return tasks_response
-    }).then(function(tasks_response) {
+    })
+    .then(function(tasks_response) {
         // if request is successful (code 200)
         if (tasks_response.status==200){
             tasks_response.json().then(function(tasks){
@@ -113,7 +115,14 @@ function fetch_database(){
                 });
             })
         }
+    })
+    .catch(error =>{
+        showToast("Erreur de connexion au serveur, n'oubliez pas de lancer le terminal à partir du fichier .bat","error")
+        console.log(error);
+        setInterval(reloader => {location.reload()},5000);
     });
+
+    // fetch clients
     fetch(get_clients()).then(function(clients_response) {
         return clients_response
     }).then(function(clients_response) {
