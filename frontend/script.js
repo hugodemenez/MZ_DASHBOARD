@@ -6,33 +6,27 @@ const loading = document.getElementById("loading")
 const clients = []
 
 
-function groupBy(list, property) {
-    return list.reduce((result, item) => {
-    const key = item[property];
-    if (!result[key]) {
-    result[key] = [];
-    }
-    result[key].push(item);
-    return result;
-}, {});
-}
-
-function concatElementsOnKey(data,key){
-    var list = [];
-    for (value in (data)){
-        item = data[value][0];
-        total = 0;
-        for (i in item){
-            var total = parseInt(total) + parseInt(item[key]);
+function group_timetable(timetable){
+    const groupped_list = timetable.reduce((result, item) => {
+        const key = item["AFFAIRES"];
+        if (!result[key]) {
+        result[key] = [];
         }
-        item[key] = total;
-        list.push(item);
+        result[key].push(item);
+        return result;
+    }, {});
+
+    var list = [];
+    for (value in (groupped_list)){
+        total_client_work = groupped_list[value][0];
+        total = 0;
+        for (i of groupped_list[value]){
+            var total = parseInt(total) + parseInt(i["Total"]);
+        }
+        total_client_work["Total"] = total;
+        list.push(total_client_work);
     }
     return list;
-}
-
-function groupTimetableOnAffaire(timetable){
-    return concatElementsOnKey(groupBy(timetable, "AFFAIRES"),"Total");
 }
 
 // Function to remove overlay when dialog is closed
@@ -103,14 +97,12 @@ function add_timetable_to_db(data){
         return response.json();
     }).then(function(response) {
         showToast("Contenu ajouté à la base de données");
-        fetch_database();
     });
 }
 
 function fetch_database(){
     // fetch tasks
-    const tasks_request = get_tasks();
-    fetch(tasks_request).then(function(tasks_response) {
+    fetch(get_tasks()).then(function(tasks_response) {
         return tasks_response
     }).then(function(tasks_response) {
         // if request is successful (code 200)
@@ -122,8 +114,7 @@ function fetch_database(){
             })
         }
     });
-    const clients_request = get_clients();
-    fetch(clients_request).then(function(clients_response) {
+    fetch(get_clients()).then(function(clients_response) {
         return clients_response
     }).then(function(clients_response) {
         // if request is successful (code 200)
@@ -132,24 +123,15 @@ function fetch_database(){
                 client.forEach(element => {
                     clients.push(element);
                 });
-                const timetable_request = get_timetable();
-                fetch(timetable_request).then(function(timetable_response) {
-                    return timetable_response
-                }).then(function(timetable_response) {
-                    if (timetable_response.status==200){
-                        timetable_response.json().then(function(data){
-                            groupTimetableOnAffaire(data).forEach(element => {
-                                create_card(element)
-                            });
-                        })
-                    }
-                });
             })
+            fetch(get_timetable()).then(data => {
+                data.json().then(x =>{
+                    group_timetable(x).forEach(element => {create_card(element)});
+                })})
         }
         // if request is successful but no client in database (code 204)
         if (clients_response.status==204){
-            const timetable_request = get_timetable();
-                fetch(timetable_request).then(function(timetable_response) {
+                fetch(get_timetable()).then(function(timetable_response) {
                     return timetable_response
                 }).then(function(timetable_response) {
                     if (timetable_response.status==200){
@@ -157,7 +139,7 @@ function fetch_database(){
                             groupTimetableOnAffaire(data).forEach(element => {
                             create_card(element)
                         });
-                    })
+                    });
                 }
             });
         }
@@ -203,7 +185,6 @@ function create_card(data){
         // Format client name (agreement fiit find word beofre space)
         if (client.name.includes(" ")){
             client.name = client.name.substring(0,client.name.indexOf(' '));
-            console.log("Agreement FI'IT trouvé : "+client.name)
         }
 
         if (data.AFFAIRES.toUpperCase().includes(client.name.toUpperCase())){
@@ -226,7 +207,6 @@ function create_card(data){
         const title = document.createElement("h1");
         title.className = "card-title";
         title.append(data.AFFAIRES)
-
 
         // Add total hours
         const status = document.createElement("p");
