@@ -77,8 +77,7 @@ function submit_dialog_box(){
             }
         )
         response.forEach(element => {
-            // element["username"]=content.username;
-            element["username"]="test";
+            element["username"]=content.username;
         })
         // Upload the data to the database
         add_timetable_to_db(response);
