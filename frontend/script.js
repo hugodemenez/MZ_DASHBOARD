@@ -19,11 +19,14 @@ function group_timetable(timetable){
     var list = [];
     for (value in (groupped_list)){
         total_client_work = groupped_list[value][0];
+        var user_number = groupped_list[value].length;
         total = 0;
         for (i of groupped_list[value]){
             var total = parseInt(total) + parseInt(i["Total"]);
         }
+        delete total_client_work['username'];
         total_client_work["Total"] = total;
+        total_client_work["user_number"] = user_number;
         list.push(total_client_work);
     }
     return list;
@@ -74,7 +77,8 @@ function submit_dialog_box(){
             }
         )
         response.forEach(element => {
-            element["username"]=content.username;
+            // element["username"]=content.username;
+            element["username"]="test";
         })
         // Upload the data to the database
         add_timetable_to_db(response);
@@ -97,6 +101,7 @@ function add_timetable_to_db(data){
         return response.json();
     }).then(function(response) {
         showToast("Contenu ajouté à la base de données");
+        location.reload();
     });
 }
 
@@ -118,7 +123,6 @@ function fetch_database(){
     })
     .catch(error =>{
         showToast("Erreur de connexion au serveur, n'oubliez pas de lancer le terminal à partir du fichier .bat","error")
-        console.log(error);
         setInterval(reloader => {location.reload()},5000);
     });
 
@@ -207,10 +211,12 @@ function create_card(data){
         data.AFFAIRES = data.AFFAIRES.split("-")[1]
     }
 
+    const card = document.createElement('div');
+    card.className = "card";
+
     // If it is a known client
     if (is_client){
-        const card = document.createElement('div');
-        card.className = "card";
+        
 
         // Add title name
         const title = document.createElement("h1");
@@ -245,14 +251,9 @@ function create_card(data){
         status.append(progress);
 
         card.append(status);
-
-        zone1.prepend(card);
     }
     // Else it is an unknown client
     else{
-        const card = document.createElement('div');
-        card.className = "card";
-
         // Add title name
         const title = document.createElement("h1");
         title.className = "card-title";
@@ -265,9 +266,10 @@ function create_card(data){
 
         card.append(title);
         card.append(status);
-        zone1.prepend(card);
     }
+    // card.dataset.values = JSON.stringify(data);
 
+    zone1.prepend(card);
 
 }
 
@@ -336,18 +338,15 @@ function add_new_task(){
                 content:task_content.innerText
             })
             //success toast
-            showToast("Tâche ajoutée !")
+            showToast("Tâche ajoutée !","success")
         }
         else{
             //error toast
-            showToast("La tâche existe déjà !",status="error")
-
+            showToast("La tâche existe déjà !","error")
         }
-
 
         // vanish text content
         task_content.innerText = "";
-
     });
 }
 

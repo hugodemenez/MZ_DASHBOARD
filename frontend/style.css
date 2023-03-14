@@ -64,21 +64,44 @@ body{
     gap:calc(4*var(--margin));
 }
 
+.wrapper{
+    width:100%;
+    box-sizing: border-box;
+}
 .nav-item{
     margin:0 auto;
-    padding-right: var(--margin);
     box-sizing: border-box;
     width:100%;
 }
 
 .nav-item:hover{
     stroke: var(--bleu-mz);
-
 }
 
 .active{
-    border-right: solid 3px var(--bleu-mz);
     stroke: var(--bleu-mz);
+    width:100%;
+    animation: bounce 0.5s ease-in-out;
+}
+
+.active-wrapper{
+    border-right: solid 3px var(--bleu-mz);
+}
+
+
+@keyframes bounce {
+    0%, 100% {
+    transform: translateX(0);
+}
+25% {
+    transform: translateX(-10px);
+}
+50% {
+    transform: translateX(0);
+}
+75% {
+    transform: translateX(-5px);
+}
 }
 
 .header{
@@ -164,6 +187,7 @@ body{
     column-gap: var(--margin);
     overflow-y: scroll;
 }
+
 
 .zone2{
     grid-column: 2/3;
