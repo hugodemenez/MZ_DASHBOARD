@@ -383,11 +383,20 @@ body{
     right:15px;
 }
 
+.card-user{
+    width:60px;
+    height:60px;
+    border-radius: 50%;
+    border: solid var(--bleu-mz) 5px;
+    text-align: center;
+}
+
 .card-title{
     color:var(--blanc-mz);
     font-size: 24px;
     font-weight:bold;
     text-align: left;
+    width:100%;
 }
 
 .card-status{

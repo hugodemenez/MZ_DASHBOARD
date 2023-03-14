@@ -5,32 +5,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mazars - Dashboard</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
-    <link rel="icon" href="./assets/favicon.png" type="image/png">
+    <title>Mazars - Settings</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    <link rel="icon" href="../assets/favicon.png" type="image/png">
 </head>
 
-<body onload=fetch_database()>
-    <!-- Modal overlay -->
-    <div class="modal-overlay"></div>
-    <dialog id="dialog-box" class="login-dialog">
-        <form action="javascript:void(0);" class="login-form" autocomplete="on">
-            <div class="dialog-close" onclick=toogle_dialog_box()>X</div>
-            <input type="text" id="username" placeholder="Identifiant" required>
-            <input type="password" id="password"  placeholder="Mot de passe" required>
-            <button onclick=submit_dialog_box() class="login-dialog-btn" type="submit">Se connecter</button>
-        </form>
-    </dialog>
-
+<body>
     <div class="nav">
-        <div class="wrapper active-wrapper">
-            <svg class="nav-item active" width="47" height="39" viewBox="0 0 47 39" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="black" stroke-width="2">
+        <div class="wrapper">
+            <svg onclick="location.href='../index.html'" class="nav-item" width="47" height="39" viewBox="0 0 47 39" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="black" stroke-width="2">
                 <path d="M1 16.3933L20.4303 2.00291C22.2358 0.665696 24.7641 0.665696 26.5697 2.00291L46 16.3933M8.5 11.6322V33.0571C8.5 35.6866 10.7386 37.8182 13.5 37.8182H33.5C36.2614 37.8182 38.5 35.6866 38.5 33.0571V11.6322" stroke-linecap="round"/>
             </svg>
         </div>
-        <div class="wrapper">
-            <svg onclick="location.href='./pages/settings.html'" class="nav-item" width="47" height="51" viewBox="0 0 47 51" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="black" stroke-width="2">
+        <div class="wrapper active-wrapper">
+            <svg class="nav-item active" width="47" height="51" viewBox="0 0 47 51" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="black" stroke-width="2">
                 <path d="M16.4073 5.97515C16.4073 3.67932 18.2685 1.81818 20.5643 1.81818H26.4355C28.7314 1.81818 30.5925 3.67933 30.5925 5.97518C30.5925 9.17524 34.0568 11.1752 36.8281 9.57521C38.8164 8.42726 41.3589 9.10848 42.5068 11.0968L45.4424 16.1813C46.5903 18.1696 45.9091 20.712 43.9208 21.8599C41.1494 23.46 41.1494 27.4601 43.9208 29.0601C45.9091 30.2081 46.5903 32.7505 45.4424 34.7388L42.5068 39.8233C41.3589 41.8116 38.8165 42.4928 36.8282 41.3449C34.0568 39.7448 30.5925 41.7449 30.5925 44.9451C30.5925 47.241 28.7313 49.1022 26.4354 49.1022H20.5644C18.2685 49.1022 16.4073 47.241 16.4073 44.9451C16.4073 41.745 12.9432 39.7449 10.1718 41.3449C8.18353 42.4928 5.64113 41.8116 4.4932 39.8233L1.55763 34.7388C0.409695 32.7505 1.09093 30.2081 3.07922 29.0601C5.85058 27.4601 5.85059 23.46 3.07922 21.8599C1.09093 20.712 0.409697 18.1696 1.55763 16.1813L4.4932 11.0967C5.64114 9.10846 8.18356 8.42724 10.1718 9.57517C12.9431 11.1752 16.4073 9.17519 16.4073 5.97515Z" />
                 <path d="M32.9567 25.4602C32.9567 30.683 28.7228 34.917 23.4999 34.917C18.2771 34.917 14.0431 30.683 14.0431 25.4602C14.0431 20.2373 18.2771 16.0034 23.4999 16.0034C28.7228 16.0034 32.9567 20.2373 32.9567 25.4602Z" />
             </svg>
@@ -48,14 +37,7 @@
 
     </div>
     <div class="header">
-        <input id="search-bar" onkeyup=search_bar() type="text" class="search-bar" placeholder="🔍 Rechercher un dossier...">
-        <img src="./assets/loading.gif" alt="loading" class="loading">
-        <button class="sync-data-btn" id="open-login-dialog" onclick=toogle_dialog_box()  type="button">
-            Importer mes temps 
-        </button>
-        <label class="agreement-fiit-upload"for="agreement-fiit">Importer des Agreements FI'IT</label>
-        <input style="visibility:hidden;" title="file uploader" type="file" name="" id="agreement-fiit" onchange=add_agreementfiit_to_db() accept=".xlsx" multiple>
-        <img src="./assets/logo.png" alt="logo mazars" class="logo">
+        <img src="../assets/logo.png" alt="logo mazars" class="logo">
     </div>
     <div class="dashboard">
         <div id="zone1" class="zone1">
@@ -85,6 +67,6 @@
 
 </body>
 <footer>
-    <script src="./script.js"></script>
+    <script src="../script.js"></script>
 </footer>
 </html>

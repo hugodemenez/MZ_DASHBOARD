@@ -19,14 +19,15 @@ function group_timetable(timetable){
     var list = [];
     for (value in (groupped_list)){
         total_client_work = groupped_list[value][0];
-        var user_number = groupped_list[value].length;
+        total_client_work["users"] = [];
         total = 0;
         for (i of groupped_list[value]){
+            total_client_work["users"].push(i["username"]);
             var total = parseInt(total) + parseInt(i["Total"]);
         }
         delete total_client_work['username'];
         total_client_work["Total"] = total;
-        total_client_work["user_number"] = user_number;
+
         list.push(total_client_work);
     }
     return list;
@@ -207,21 +208,36 @@ function create_card(data){
     });
 
     if(data.AFFAIRES.includes("-")){
-        data.AFFAIRES = data.AFFAIRES.split("-")[1]
+        data.AFFAIRES = data.AFFAIRES.split("-").slice(1,3).join(", ")
     }
 
+    // Create card
     const card = document.createElement('div');
     card.className = "card";
 
+    // Add user number
+    var index = 0;
+    for (user of data.users){
+
+        const img = document.createElement("img");
+        img.className = "card-user";
+        img.src = "./assets/avatar/"+user+".png";
+        img.title = user;
+        if (index>0){
+            img.style.transform = "translateX(-20px)";
+        }
+        card.append(img);
+        index += 1;
+    }
+
+
+    // Add title name
+    const title = document.createElement("h1");
+    title.className = "card-title";
+    title.append(data.AFFAIRES)
+
     // If it is a known client
     if (is_client){
-        
-
-        // Add title name
-        const title = document.createElement("h1");
-        title.className = "card-title";
-        title.append(data.AFFAIRES)
-
         // Add total hours
         const status = document.createElement("p");
         status.className = "card-status";
@@ -253,21 +269,15 @@ function create_card(data){
     }
     // Else it is an unknown client
     else{
-        // Add title name
-        const title = document.createElement("h1");
-        title.className = "card-title";
-        title.append(data.AFFAIRES)
-
         // Add total hours
         const status = document.createElement("p");
         status.className = "card-status";
-        status.append("Temps chargés : "+data.Total+"h")
-
+        status.append("Temps chargés : "+data.Total+"h");
         card.append(title);
         card.append(status);
     }
-    // card.dataset.values = JSON.stringify(data);
 
+    // card.dataset.values = JSON.stringify(data);
     zone1.prepend(card);
 
 }
