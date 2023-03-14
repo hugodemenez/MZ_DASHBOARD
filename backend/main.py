@@ -2,9 +2,10 @@
 """
 
 import os
-import uvicorn
-import pandas as pd
 import sqlite3
+import uvicorn
+import asyncio
+import pandas as pd
 
 from tools import Akuiteo, read_excel_file
 from fastapi import FastAPI, UploadFile
@@ -158,6 +159,24 @@ def upload_agreementfiit_data(
         status_code=200,
         detail="Success",
     )
+
+
+
+@app.post("/changeAvatar/")
+async def change_avatar(
+    file: UploadFile
+    ):
+    """API post to change the avatar of the user
+    """
+    contents = await file.read() # read the file data
+    with open(f"./frontend/assets/avatar/{file.filename}", "wb") as f:
+        f.write(contents) # write the file data to disk
+
+    raise HTTPException(
+        status_code=200,
+        detail="Success",
+    )
+
 
 @app.get("/getClients/")
 def get_clients(

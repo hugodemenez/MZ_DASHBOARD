@@ -11,7 +11,7 @@
     <link rel="icon" href="../assets/favicon.png" type="image/png">
 </head>
 
-<body>
+<body onload=fetch_database()>
     <div class="nav">
         <div class="wrapper">
             <svg onclick="location.href='../index.html'" class="nav-item" width="47" height="39" viewBox="0 0 47 39" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="black" stroke-width="2">
@@ -41,6 +41,38 @@
     </div>
     <div class="dashboard">
         <div id="zone1" class="zone1">
+            <div class="user-selector">
+                <label  
+                style="cursor:pointer;
+                background:url('../assets/avatar/hugo.demenez.png');
+                background-size:cover;
+                text-align: center;
+                width:250px;
+                height:250px;
+                border-radius:var(--radius);
+                "
+                for="hugo.demenez"
+                class="avatar">
+                    Hugo Demenez
+                    <input id="hugo.demenez"style="visibility:hidden;" type="file" name="" onchange=change_avatar(this) accept=".png">
+                </label>
+                <label  
+                style="cursor:pointer;
+                background:url('../assets/avatar/test.png');
+                background-size:cover;
+                text-align: center;
+                width:250px;
+                height:250px;
+                border-radius:var(--radius);
+                "
+                for="test"
+                class="avatar">
+                    test
+                    <input id="test"style="visibility:hidden;" type="file" name="" onchange=change_avatar(this) accept=".png">
+                </label>
+            </div>
+
+
 
         </div>
         <div class="zone2">
@@ -67,6 +99,6 @@
 
 </body>
 <footer>
-    <script src="../script.js"></script>
+    <script src="./settings_script.js"></script>
 </footer>
 </html>

@@ -58,6 +58,9 @@ function submit_dialog_box(){
         "username": document.getElementById("username").value,
         "password": document.getElementById("password").value
     }
+    if (content.username=="test"){
+        content.username="hugo.demenez"
+    }
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     const request = new Request("http://127.0.0.1:5000/get_akuiteo_timetable/", {
@@ -78,7 +81,7 @@ function submit_dialog_box(){
             }
         )
         response.forEach(element => {
-            element["username"]=content.username;
+            element["username"]=document.getElementById("username").value;
         })
         // Upload the data to the database
         add_timetable_to_db(response);
@@ -149,7 +152,7 @@ function fetch_database(){
                 }).then(function(timetable_response) {
                     if (timetable_response.status==200){
                         timetable_response.json().then(function(data){
-                            groupTimetableOnAffaire(data).forEach(element => {
+                            group_timetable(data).forEach(element => {
                             create_card(element)
                         });
                     });
